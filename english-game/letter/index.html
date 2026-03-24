@@ -276,7 +276,9 @@
 
 			if (gameMode === 'L_TO_H') {
 				modeTextEl.textContent = "Which sound matches?";
-				targetEl.textContent = currentLetter.char;
+				const parts = currentLetter.char.split(' ');
+				const displayChar = Math.random() < 0.5 ? parts[0] : parts[1];
+				targetEl.textContent = displayChar;
 				targetEl.classList.remove('hebrew-text');
 				targetEl.classList.add('serif-font');
 			} else {
@@ -309,7 +311,9 @@
 					btn.classList.add('hebrew-text');
 					btn.classList.add(choice.hebrew.length > 5 ? 'text-lg' : 'text-2xl');
 				} else {
-					btn.textContent = choice.char;
+					const parts = choice.char.split(' ');
+					const displayChar = Math.random() < 0.5 ? parts[0] : parts[1];
+					btn.textContent = displayChar;
 					btn.classList.add('serif-font', 'text-3xl');
 				}
 
