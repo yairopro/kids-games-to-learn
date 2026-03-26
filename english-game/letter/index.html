@@ -113,6 +113,13 @@
 				<button onclick="toggleModal()"
 					class="text-gray-500 hover:text-red-500 text-3xl font-sans">&times;</button>
 			</div>
+			<div class="p-4 border-b flex items-center justify-between px-6">
+				<span class="text-gray-700 font-sans font-bold text-sm">Keyboard Mode</span>
+				<label class="relative inline-flex items-center cursor-pointer">
+					<input type="checkbox" id="keyboard-toggle" class="sr-only peer" onchange="keyboardMode = this.checked">
+					<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+				</label>
+			</div>
 			<div class="p-4 overflow-y-auto grid grid-cols-3 sm:grid-cols-4 gap-2 no-scrollbar"
 				id="letter-selector-grid">
 				<!-- Selection buttons injected here -->
@@ -220,6 +227,7 @@
 		let isProcessing = false;
 		let gameMode = 'L_TO_H';
 		let hasCelebrated = false;
+		let keyboardMode = false;
 
 		const scoreEl = document.getElementById('score');
 		const scoreContainer = document.getElementById('score-container');
@@ -252,7 +260,10 @@
 		function toggleModal() {
 			modal.classList.toggle('hidden');
 			modal.classList.toggle('flex');
-			if (!modal.classList.contains('hidden')) setupSelector();
+			if (!modal.classList.contains('hidden')) {
+				setupSelector();
+				document.getElementById('keyboard-toggle').checked = keyboardMode;
+			}
 		}
 
 		function saveAndClose() {
@@ -294,7 +305,11 @@
 			if (isProcessing) return;
 			const activePool = allLetters.filter(l => l.active);
 
-			gameMode = Math.random() > 0.5 ? 'L_TO_H' : 'H_TO_L';
+			if (keyboardMode) {
+				gameMode = 'H_TO_L';
+			} else {
+				gameMode = Math.random() > 0.5 ? 'L_TO_H' : 'H_TO_L';
+			}
 			currentLetter = weightedRandomSelect();
 
 			if (gameMode === 'L_TO_H') {
@@ -305,7 +320,7 @@
 				targetEl.classList.remove('hebrew-text');
 				targetEl.classList.add('serif-font');
 			} else {
-				modeTextEl.textContent = "Which letter is this?";
+				modeTextEl.textContent = keyboardMode ? "Type the letter!" : "Which letter is this?";
 				targetEl.textContent = currentLetter.hebrew;
 				targetEl.classList.add('hebrew-text');
 				targetEl.classList.remove('serif-font');
@@ -314,37 +329,100 @@
 			const len = targetEl.textContent.length;
 			targetEl.style.fontSize = len > 8 ? "3rem" : (len > 4 ? "4.5rem" : "7.5rem");
 
-			let pool = activePool.filter(l => l.id !== currentLetter.id);
-			let distractors = [];
-			const count = Math.min(pool.length, 5);
-			for (let i = 0; i < count; i++) {
-				const randIndex = Math.floor(Math.random() * pool.length);
-				distractors.push(pool.splice(randIndex, 1)[0]);
-			}
-
-			const choices = [currentLetter, ...distractors].sort(() => Math.random() - 0.5);
-
 			optionsEl.innerHTML = '';
-			choices.forEach(choice => {
-				const btn = document.createElement('button');
-				btn.className = "card bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-2xl py-3 px-1 font-bold text-blue-800 shadow-sm flex justify-center items-center min-h-[70px]";
 
-				if (gameMode === 'L_TO_H') {
-					btn.textContent = choice.hebrew;
-					btn.classList.add('hebrew-text');
-					btn.classList.add(choice.hebrew.length > 5 ? 'text-lg' : 'text-2xl');
-				} else {
-					const parts = choice.char.split(' ');
-					const displayChar = Math.random() < 0.5 ? parts[0] : parts[1];
-					btn.textContent = displayChar;
-					btn.classList.add('serif-font', 'text-3xl');
+			if (keyboardMode) {
+				const input = document.createElement('input');
+				input.type = 'text';
+				input.maxLength = 1;
+				input.id = 'keyboard-input';
+				input.className = 'serif-font text-5xl text-center w-24 h-20 border-4 border-indigo-300 rounded-2xl outline-none focus:border-indigo-500 uppercase mx-auto block bg-blue-50 text-indigo-700 font-bold';
+				input.autocomplete = 'off';
+				input.autocapitalize = 'off';
+				input.addEventListener('input', handleKeyboardInput);
+				optionsEl.className = 'flex justify-center';
+				optionsEl.appendChild(input);
+				setTimeout(() => input.focus(), 50);
+			} else {
+				optionsEl.className = 'grid grid-cols-2 gap-3';
+				let pool = activePool.filter(l => l.id !== currentLetter.id);
+				let distractors = [];
+				const count = Math.min(pool.length, 5);
+				for (let i = 0; i < count; i++) {
+					const randIndex = Math.floor(Math.random() * pool.length);
+					distractors.push(pool.splice(randIndex, 1)[0]);
 				}
 
-				btn.onclick = () => handleGuess(choice, btn);
-				optionsEl.appendChild(btn);
-			});
+				const choices = [currentLetter, ...distractors].sort(() => Math.random() - 0.5);
+
+				choices.forEach(choice => {
+					const btn = document.createElement('button');
+					btn.className = "card bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-2xl py-3 px-1 font-bold text-blue-800 shadow-sm flex justify-center items-center min-h-[70px]";
+
+					if (gameMode === 'L_TO_H') {
+						btn.textContent = choice.hebrew;
+						btn.classList.add('hebrew-text');
+						btn.classList.add(choice.hebrew.length > 5 ? 'text-lg' : 'text-2xl');
+					} else {
+						const parts = choice.char.split(' ');
+						const displayChar = Math.random() < 0.5 ? parts[0] : parts[1];
+						btn.textContent = displayChar;
+						btn.classList.add('serif-font', 'text-3xl');
+					}
+
+					btn.onclick = () => handleGuess(choice, btn);
+					optionsEl.appendChild(btn);
+				});
+			}
 
 			feedbackEl.classList.add('opacity-0');
+		}
+
+		function handleKeyboardInput(e) {
+			const typed = e.target.value.toUpperCase();
+			if (!typed) return;
+			if (isProcessing) { e.target.value = ''; return; }
+			isProcessing = true;
+
+			const correctChar = currentLetter.char.split(' ')[0];
+			const isCorrect = typed === correctChar;
+			const input = e.target;
+
+			if (isCorrect) {
+				score += 1;
+				currentLetter.successes++;
+				currentLetter.weight = Math.max(2, currentLetter.weight - 3);
+				input.classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+				input.classList.remove('bg-blue-50', 'border-indigo-300');
+				showFeedback("Correct! 🎉", "text-green-500");
+
+				if (score >= 50 && !hasCelebrated) {
+					hasCelebrated = true;
+					triggerConfetti();
+				}
+
+				setTimeout(() => {
+					isProcessing = false;
+					initGame();
+				}, 800);
+			} else {
+				score -= 10;
+				currentLetter.failures++;
+				currentLetter.weight += 10;
+				input.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+				input.classList.remove('bg-blue-50', 'border-indigo-300');
+				showFeedback("-10 Points! 🔄", "text-red-500");
+
+				setTimeout(() => {
+					input.value = '';
+					input.classList.remove('bg-red-100', 'border-red-500', 'text-red-700');
+					input.classList.add('bg-blue-50', 'border-indigo-300');
+					input.focus();
+					isProcessing = false;
+				}, 800);
+			}
+
+			scoreEl.textContent = score;
 		}
 
 		function handleGuess(choice, element) {
