@@ -126,19 +126,42 @@
 		</div>
 	</div>
 
+	<!-- Stats Modal -->
+	<div id="stats-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+		<div class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+			<div class="p-6 border-b flex justify-between items-center bg-emerald-50">
+				<h2 class="text-xl text-emerald-700">Letter Statistics</h2>
+				<button onclick="toggleStatsModal()"
+					class="text-gray-500 hover:text-red-500 text-3xl font-sans">&times;</button>
+			</div>
+			<div class="p-4 overflow-y-auto no-scrollbar" id="stats-content">
+			</div>
+		</div>
+	</div>
+
 	<!-- Main Game UI -->
 	<div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-6 border-4 border-indigo-400 relative z-10">
 		<div class="flex justify-between items-center mb-6">
-			<button onclick="toggleModal()"
-				class="bg-indigo-100 text-indigo-600 p-2 rounded-xl hover:bg-indigo-200 transition-colors">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-						d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-						d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-				</svg>
-			</button>
+			<div class="flex gap-2">
+				<button onclick="toggleModal()"
+					class="bg-indigo-100 text-indigo-600 p-2 rounded-xl hover:bg-indigo-200 transition-colors">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+					</svg>
+				</button>
+				<button onclick="toggleStatsModal()"
+					class="bg-emerald-100 text-emerald-600 p-2 rounded-xl hover:bg-emerald-200 transition-colors">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+					</svg>
+				</button>
+			</div>
 			<div id="score-container"
 				class="bg-yellow-400 text-white px-5 py-2 rounded-full shadow-md text-lg min-w-[110px] text-center transition-all duration-500">
 				<span id="score">0</span>
@@ -164,32 +187,32 @@
 
 	<script>
 		const allLetters = [
-			{ id: 0, char: 'A a', hebrew: 'אֵי', weight: 10, active: true },
-			{ id: 1, char: 'B b', hebrew: 'בִּי', weight: 10, active: true },
-			{ id: 2, char: 'C c', hebrew: 'סִי', weight: 10, active: true },
-			{ id: 3, char: 'D d', hebrew: 'דִּי', weight: 10, active: true },
-			{ id: 4, char: 'E e', hebrew: 'אִ', weight: 10, active: true },
-			{ id: 5, char: 'F f', hebrew: 'אֶף', weight: 10, active: true },
-			{ id: 6, char: 'G g', hebrew: 'גִ׳', weight: 10, active: true },
-			{ id: 7, char: 'H h', hebrew: 'אֵישׁ', weight: 10, active: true },
-			{ id: 8, char: 'I i', hebrew: 'אָי', weight: 10, active: true },
-			{ id: 9, char: 'J j', hebrew: 'גֵ׳י', weight: 10, active: true },
-			{ id: 10, char: 'K k', hebrew: 'כֵּי', weight: 10, active: true },
-			{ id: 11, char: 'L l', hebrew: 'אֶל', weight: 10, active: false },
-			{ id: 12, char: 'M m', hebrew: 'אֶם', weight: 10, active: false },
-			{ id: 13, char: 'N n', hebrew: 'אֶן', weight: 10, active: false },
-			{ id: 14, char: 'O o', hebrew: 'אוֹ', weight: 10, active: false },
-			{ id: 15, char: 'P p', hebrew: 'פִּי', weight: 10, active: false },
-			{ id: 16, char: 'Q q', hebrew: 'קְיוּ', weight: 10, active: false },
-			{ id: 17, char: 'R r', hebrew: 'אָר', weight: 10, active: false },
-			{ id: 18, char: 'S s', hebrew: 'אֶס', weight: 10, active: false },
-			{ id: 19, char: 'T t', hebrew: 'טִי', weight: 10, active: false },
-			{ id: 20, char: 'U u', hebrew: 'יוּ', weight: 10, active: false },
-			{ id: 21, char: 'V v', hebrew: 'וִי', weight: 10, active: false },
-			{ id: 22, char: 'W w', hebrew: 'דַּאבֶּלְיוּ', weight: 10, active: false },
-			{ id: 23, char: 'X x', hebrew: 'אֶקְס', weight: 10, active: false },
-			{ id: 24, char: 'Y y', hebrew: 'אוּאָי', weight: 10, active: false },
-			{ id: 25, char: 'Z z', hebrew: 'זִי', weight: 10, active: false }
+			{ id: 0, char: 'A a', hebrew: 'אֵי', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 1, char: 'B b', hebrew: 'בִּי', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 2, char: 'C c', hebrew: 'סִי', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 3, char: 'D d', hebrew: 'דִּי', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 4, char: 'E e', hebrew: 'אִ', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 5, char: 'F f', hebrew: 'אֶף', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 6, char: 'G g', hebrew: 'גִ׳', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 7, char: 'H h', hebrew: 'אֵישׁ', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 8, char: 'I i', hebrew: 'אָי', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 9, char: 'J j', hebrew: 'גֵ׳י', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 10, char: 'K k', hebrew: 'כֵּי', weight: 10, active: true, successes: 0, failures: 0 },
+			{ id: 11, char: 'L l', hebrew: 'אֶל', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 12, char: 'M m', hebrew: 'אֶם', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 13, char: 'N n', hebrew: 'אֶן', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 14, char: 'O o', hebrew: 'אוֹ', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 15, char: 'P p', hebrew: 'פִּי', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 16, char: 'Q q', hebrew: 'קְיוּ', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 17, char: 'R r', hebrew: 'אָר', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 18, char: 'S s', hebrew: 'אֶס', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 19, char: 'T t', hebrew: 'טִי', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 20, char: 'U u', hebrew: 'יוּ', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 21, char: 'V v', hebrew: 'וִי', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 22, char: 'W w', hebrew: 'דַּאבֶּלְיוּ', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 23, char: 'X x', hebrew: 'אֶקְס', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 24, char: 'Y y', hebrew: 'אוּאָי', weight: 10, active: false, successes: 0, failures: 0 },
+			{ id: 25, char: 'Z z', hebrew: 'זִי', weight: 10, active: false, successes: 0, failures: 0 }
 		];
 
 		let score = 0;
@@ -333,6 +356,7 @@
 
 			if (isCorrect) {
 				score += 1;
+				currentLetter.successes++;
 				currentLetter.weight = Math.max(2, currentLetter.weight - 3);
 				element.classList.add('correct-anim');
 				showFeedback("Correct! 🎉", "text-green-500");
@@ -349,6 +373,7 @@
 			} else {
 				// Incorrect guess: Penalty increased to 10 points
 				score -= 10;
+				currentLetter.failures++;
 				currentLetter.weight += 10;
 				element.classList.add('wrong-anim');
 
@@ -376,6 +401,63 @@
 		function showFeedback(msg, colorClass) {
 			feedbackEl.textContent = msg;
 			feedbackEl.className = `mt-6 text-center text-xl opacity-100 transition-opacity font-bold ${colorClass}`;
+		}
+
+		const statsModal = document.getElementById('stats-modal');
+		const statsContent = document.getElementById('stats-content');
+
+		function toggleStatsModal() {
+			statsModal.classList.toggle('hidden');
+			statsModal.classList.toggle('flex');
+			if (!statsModal.classList.contains('hidden')) renderStats();
+		}
+
+		function renderStats() {
+			const played = allLetters.filter(l => l.successes > 0 || l.failures > 0);
+			const unplayed = allLetters.filter(l => l.successes === 0 && l.failures === 0);
+
+			const sorted = [...played].sort((a, b) => {
+				const rateA = a.successes / (a.successes + a.failures);
+				const rateB = b.successes / (b.successes + b.failures);
+				return rateA - rateB;
+			});
+
+			const all = [...sorted, ...unplayed];
+
+			statsContent.innerHTML = `
+				<table class="w-full text-sm font-sans">
+					<thead>
+						<tr class="text-gray-500 border-b">
+							<th class="text-left py-2 px-2">Letter</th>
+							<th class="text-center py-2 px-2 text-green-600">Pass</th>
+							<th class="text-center py-2 px-2 text-red-500">Fail</th>
+							<th class="text-center py-2 px-2">Rate</th>
+						</tr>
+					</thead>
+					<tbody>
+						${all.map(l => {
+							const total = l.successes + l.failures;
+							const rate = total > 0 ? Math.round((l.successes / total) * 100) : null;
+							const rateText = rate !== null ? rate + '%' : '-';
+							const barColor = rate === null ? 'bg-gray-200' : rate >= 70 ? 'bg-green-400' : rate >= 40 ? 'bg-yellow-400' : 'bg-red-400';
+							const barWidth = rate !== null ? rate : 0;
+							return `
+								<tr class="border-b last:border-0">
+									<td class="py-2 px-2 serif-font font-bold text-indigo-700">${l.char.split(' ')[0]}</td>
+									<td class="text-center py-2 px-2 text-green-600 font-bold">${l.successes}</td>
+									<td class="text-center py-2 px-2 text-red-500 font-bold">${l.failures}</td>
+									<td class="py-2 px-2 w-24">
+										<div class="flex items-center gap-2">
+											<div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
+												<div class="${barColor} h-full rounded-full" style="width:${barWidth}%"></div>
+											</div>
+											<span class="text-xs font-bold w-8 text-right">${rateText}</span>
+										</div>
+									</td>
+								</tr>`;
+						}).join('')}
+					</tbody>
+				</table>`;
 		}
 
 		window.onload = initGame;
