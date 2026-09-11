@@ -1,0 +1,527 @@
+[
+  {
+    "word": "Yes",
+    "transliteration": "כֵּן",
+    "translation": "יֶס"
+  },
+  {
+    "word": "No",
+    "transliteration": "לֹא",
+    "translation": "נוֹ"
+  },
+  {
+    "word": "Mother",
+    "transliteration": "אִמָּא",
+    "translation": "מֹודֵר"
+  },
+  {
+    "word": "Father",
+    "transliteration": "אַבָּא",
+    "translation": "פַדֵר"
+  },
+  {
+    "word": "Brother",
+    "transliteration": "אָח",
+    "translation": "ברוֹדֵר"
+  },
+  {
+    "word": "Sister",
+    "transliteration": "אָחוֹת",
+    "translation": "סִיסתֵר"
+  },
+  {
+    "word": "Baby",
+    "transliteration": "תִּינוֹק",
+    "translation": "בֶּייבִּי"
+  },
+  {
+    "word": "Red",
+    "transliteration": "אָדֹם",
+    "translation": "רֶד"
+  },
+  {
+    "word": "Blue",
+    "transliteration": "כָּחֹל",
+    "translation": "בּלוּ"
+  },
+  {
+    "word": "Yellow",
+    "transliteration": "צָהֹב",
+    "translation": "יֶלוֹ"
+  },
+  {
+    "word": "Green",
+    "transliteration": "יָרֹק",
+    "translation": "גּרִין"
+  },
+  {
+    "word": "Orange",
+    "transliteration": "כָּתֹם",
+    "translation": "אוֹרֵנְג׳"
+  },
+  {
+    "word": "Purple",
+    "transliteration": "סָגֹל",
+    "translation": "פַּוּרפְּל"
+  },
+  {
+    "word": "Black",
+    "transliteration": "שָׁחֹר",
+    "translation": "בּלָק"
+  },
+  {
+    "word": "White",
+    "transliteration": "לָבָן",
+    "translation": "וּאָיית"
+  },
+  {
+    "word": "Zero",
+    "transliteration": "0",
+    "translation": "זֵרוֹ"
+  },
+  {
+    "word": "One",
+    "transliteration": "1",
+    "translation": "וּאוֹן"
+  },
+  {
+    "word": "Two",
+    "transliteration": "2",
+    "translation": "טוּ"
+  },
+  {
+    "word": "Three",
+    "transliteration": "3",
+    "translation": "סרִי"
+  },
+  {
+    "word": "Four",
+    "transliteration": "4",
+    "translation": "פוּר"
+  },
+  {
+    "word": "Five",
+    "transliteration": "5",
+    "translation": "פָייב"
+  },
+  {
+    "word": "Six",
+    "transliteration": "6",
+    "translation": "סִקס"
+  },
+  {
+    "word": "Seven",
+    "transliteration": "7",
+    "translation": "סֶבֵן"
+  },
+  {
+    "word": "Eight",
+    "transliteration": "8",
+    "translation": "אֶייט"
+  },
+  {
+    "word": "Nine",
+    "transliteration": "9",
+    "translation": "נָיין"
+  },
+  {
+    "word": "Ten",
+    "transliteration": "10",
+    "translation": "טֶן"
+  },
+  {
+    "word": "Dog",
+    "transliteration": "כֶּלֶב",
+    "translation": "דוֹג"
+  },
+  {
+    "word": "Cat",
+    "transliteration": "חָתוּל",
+    "translation": "קָת"
+  },
+  {
+    "word": "Bird",
+    "transliteration": "צִפּוֹר",
+    "translation": "בֵּרד"
+  },
+  {
+    "word": "Fish",
+    "transliteration": "דָּג",
+    "translation": "פִישׁ"
+  },
+  {
+    "word": "Horse",
+    "transliteration": "סוּס",
+    "translation": "הוֹרס"
+  },
+  {
+    "word": "Cow",
+    "transliteration": "פָּרָה",
+    "translation": "קָאוֹ"
+  },
+  {
+    "word": "Pig",
+    "transliteration": "חֲזִיר",
+    "translation": "פִּיג"
+  },
+  {
+    "word": "Sheep",
+    "transliteration": "כֶּבֶשׂ",
+    "translation": "שִׁיפּ"
+  },
+  {
+    "word": "Lion",
+    "transliteration": "אַרְיֵה",
+    "translation": "לָיוֹן"
+  },
+  {
+    "word": "Bear",
+    "transliteration": "דֹּב",
+    "translation": "בִּיר"
+  },
+  {
+    "word": "Duck",
+    "transliteration": "בַּרְוָז",
+    "translation": "דַק"
+  },
+  {
+    "word": "Mouse",
+    "transliteration": "עַכְבָּר",
+    "translation": "מָאוּס"
+  },
+  {
+    "word": "Head",
+    "transliteration": "רֹאשׁ",
+    "translation": "הֶד"
+  },
+  {
+    "word": "Eye",
+    "transliteration": "עַיִן",
+    "translation": "אָיי"
+  },
+  {
+    "word": "Nose",
+    "transliteration": "אַף",
+    "translation": "נוֹז"
+  },
+  {
+    "word": "Mouth",
+    "transliteration": "פֶּה",
+    "translation": "מָאוּף"
+  },
+  {
+    "word": "Ears",
+    "transliteration": "אָזְנַיִם",
+    "translation": "אִיר"
+  },
+  {
+    "word": "Hand",
+    "transliteration": "יָד",
+    "translation": "הֶנְד"
+  },
+  {
+    "word": "Feet",
+    "transliteration": "רַגְלַיִם",
+    "translation": "פִט"
+  },
+  {
+    "word": "Leg",
+    "transliteration": "רֶגֶל",
+    "translation": "לֶג"
+  },
+  {
+    "word": "Arm",
+    "transliteration": "זְרוֹעַ",
+    "translation": "אָרְם"
+  },
+  {
+    "word": "Teeth",
+    "transliteration": "שִׁנַּיִם",
+    "translation": "טִיפ"
+  },
+  {
+    "word": "Bed",
+    "transliteration": "מִטָּה",
+    "translation": "בֶּד"
+  },
+  {
+    "word": "Chair",
+    "transliteration": "כִּסֵּא",
+    "translation": "שֶׁר"
+  },
+  {
+    "word": "Table",
+    "transliteration": "שֻׁלְחָן",
+    "translation": "טֶבְּל"
+  },
+  {
+    "word": "Door",
+    "transliteration": "דֶּלֶת",
+    "translation": "דוֹֹר"
+  },
+  {
+    "word": "Window",
+    "transliteration": "חַלּוֹן",
+    "translation": "וּאִינ‎דוֹ"
+  },
+  {
+    "word": "Book",
+    "transliteration": "סֵפֶר",
+    "translation": "בּוּק"
+  },
+  {
+    "word": "Toy",
+    "transliteration": "צַעֲצוּעַ",
+    "translation": "טוֹי"
+  },
+  {
+    "word": "Ball",
+    "transliteration": "כַּדּוּר",
+    "translation": "בּוֹל"
+  },
+  {
+    "word": "Car",
+    "transliteration": "מְכוֹנִית",
+    "translation": "קָר"
+  },
+  {
+    "word": "Shoe",
+    "transliteration": "נַעַל",
+    "translation": "שׁוֹ"
+  },
+  {
+    "word": "Hat",
+    "transliteration": "כוֹבַע",
+    "translation": "הָט"
+  },
+  {
+    "word": "Cup",
+    "transliteration": "כּוֹס",
+    "translation": "קֵפּ"
+  },
+  {
+    "word": "Spoon",
+    "transliteration": "כַּפִּית",
+    "translation": "ספּוּן"
+  },
+  {
+    "word": "Key",
+    "transliteration": "מַפְתֵּחַ",
+    "translation": "קִי"
+  },
+  {
+    "word": "Pen",
+    "transliteration": "עֵט",
+    "translation": "פֶּן"
+  },
+  {
+    "word": "Milk",
+    "transliteration": "חָלָב",
+    "translation": "מִילק"
+  },
+  {
+    "word": "Water",
+    "transliteration": "מַיִם",
+    "translation": "וּאָטֵר"
+  },
+  {
+    "word": "Bread",
+    "transliteration": "לֶחֶם",
+    "translation": "בּרֶד"
+  },
+  {
+    "word": "Apple",
+    "transliteration": "תַּפּוּחַ",
+    "translation": "אָפֵּל"
+  },
+  {
+    "word": "Banana",
+    "transliteration": "בָּנָנָה",
+    "translation": "בָּנָנָה"
+  },
+  {
+    "word": "Cheese",
+    "transliteration": "גְּבִינָה",
+    "translation": "שִׁיז"
+  },
+  {
+    "word": "Egg",
+    "transliteration": "בֵּיצָה",
+    "translation": "אֶג"
+  },
+  {
+    "word": "Cake",
+    "transliteration": "עוּגָה",
+    "translation": "קֶייק"
+  },
+  {
+    "word": "Juice",
+    "transliteration": "מִיץ",
+    "translation": "ג׳וּיס"
+  },
+  {
+    "word": "Cookie",
+    "transliteration": "עוּגִיָּה",
+    "translation": "קוּקִי"
+  },
+  {
+    "word": "Sun",
+    "transliteration": "שֶׁמֶשׁ",
+    "translation": "סַן"
+  },
+  {
+    "word": "Moon",
+    "transliteration": "יָרֵחַ",
+    "translation": "מוּן"
+  },
+  {
+    "word": "Star",
+    "transliteration": "כּוֹכָב",
+    "translation": "סטָר"
+  },
+  {
+    "word": "Sky",
+    "transliteration": "שָׁמַיִם",
+    "translation": "סקָי"
+  },
+  {
+    "word": "Tree",
+    "transliteration": "עֵץ",
+    "translation": "טרִי"
+  },
+  {
+    "word": "Flower",
+    "transliteration": "פֶּרַח",
+    "translation": "פלָאוּאֶר"
+  },
+  {
+    "word": "Rain",
+    "transliteration": "גֶּשֶׁם",
+    "translation": "רֶן"
+  },
+  {
+    "word": "Snow",
+    "transliteration": "שֶׁלֶג",
+    "translation": "סנוֹ"
+  },
+  {
+    "word": "Wind",
+    "transliteration": "רוּחַ",
+    "translation": "וּאִינד"
+  },
+  {
+    "word": "Grass",
+    "transliteration": "דֶּשֶׁא",
+    "translation": "גרָס"
+  },
+  {
+    "word": "Run",
+    "transliteration": "לָרוּץ",
+    "translation": "רַן"
+  },
+  {
+    "word": "Walk",
+    "transliteration": "לָלֶכֶת",
+    "translation": "וּאוֹלק"
+  },
+  {
+    "word": "Sit",
+    "transliteration": "לָשֶׁבֶת",
+    "translation": "סִיט"
+  },
+  {
+    "word": "Stand",
+    "transliteration": "לַעֲמֹד",
+    "translation": "סטָנד"
+  },
+  {
+    "word": "Sleep",
+    "transliteration": "לִישֹׁן",
+    "translation": "סלִיפּ"
+  },
+  {
+    "word": "Eat",
+    "transliteration": "לֶאֱכֹל",
+    "translation": "אִיט"
+  },
+  {
+    "word": "Drink",
+    "transliteration": "לִשְׁתּוֹת",
+    "translation": "דרִינק"
+  },
+  {
+    "word": "Play",
+    "transliteration": "לְשַׂחֵק",
+    "translation": "פּלֶי"
+  },
+  {
+    "word": "Read",
+    "transliteration": "לִקְרֹא",
+    "translation": "רִיד"
+  },
+  {
+    "word": "Jump",
+    "transliteration": "לִקְפֹּץ",
+    "translation": "גָ׳מפּ"
+  },
+  {
+    "word": "Smile",
+    "transliteration": "לְחַיֵּךְ",
+    "translation": "סמָייל"
+  },
+  {
+    "word": "Stop",
+    "transliteration": "לַעֲצֹר",
+    "translation": "סטוֹפּ"
+  },
+  {
+    "word": "Big",
+    "transliteration": "גָּדוֹל",
+    "translation": "בִּיג"
+  },
+  {
+    "word": "Small",
+    "transliteration": "קָטָן",
+    "translation": "סמוֹל"
+  },
+  {
+    "word": "Hot",
+    "transliteration": "חַם",
+    "translation": "הוֹֹט"
+  },
+  {
+    "word": "Cold",
+    "transliteration": "קַר",
+    "translation": "קוֹלד"
+  },
+  {
+    "word": "Happy",
+    "transliteration": "שָׂמֵחַ",
+    "translation": "הָפִּי"
+  },
+  {
+    "word": "Sad",
+    "transliteration": "עָצוּב",
+    "translation": "סָד"
+  },
+  {
+    "word": "Good",
+    "transliteration": "טוֹב",
+    "translation": "גוּד"
+  },
+  {
+    "word": "Bad",
+    "transliteration": "רַע",
+    "translation": "בָּד"
+  },
+  {
+    "word": "Fast",
+    "transliteration": "מָהִיר",
+    "translation": "פָסט"
+  },
+  {
+    "word": "Slow",
+    "transliteration": "אִטִּי",
+    "translation": "סלוֹ"
+  }
+]

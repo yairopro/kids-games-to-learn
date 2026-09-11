@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "kids-games-to-learn",
     "public": ".",
     "ignore": [
       "firebase.json",
