@@ -1,1 +1,2 @@
-Since this repository is about multiple projects, ask which project you task is scoped to when it's unclear.
+- Since this repository is about multiple projects, ask which project you task is scoped to when it's unclear.
+- Bun is installed with mise in the repository scope only.
