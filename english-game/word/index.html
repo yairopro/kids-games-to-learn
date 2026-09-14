@@ -38,6 +38,7 @@
 			position: relative;
 			width: 56px;
 			height: 56px;
+			cursor: pointer;
 		}
 
 		.credits-progress {
@@ -477,7 +478,7 @@ Happy birthday	הֶפִּי בֶּרְת'דֵי	יום הולדת שמח
 			const chosen = btn.dataset.hebrew;
 
 			if (chosen === correctHebrew) {
-				score += transliterationRevealed ? 1 : 2;
+				score += 1;
 				wordScores[currentWord.english] = Math.max(0, wordScores[currentWord.english] - 1);
 				scoreEl.textContent = score;
 				btn.classList.add('correct', 'correct-show');
@@ -485,21 +486,23 @@ Happy birthday	הֶפִּי בֶּרְת'דֵי	יום הולדת שמח
 				awaitingAfterCorrect = true;
 				setTimeout(loadNewRound, 1500);
 			} else {
-				score = Math.max(0, score - 1);
+				score -= 10;
 				wordScores[currentWord.english] = (wordScores[currentWord.english] || INITIAL_SCORE) + 1;
 				scoreEl.textContent = score;
 				btn.classList.add('incorrect');
-				transliterationEl.textContent = currentWord.transliteration;
-				transliterationRevealed = true;
-				// Highlight the correct answer in green
-				const correctBtn = choiceAreaEl.querySelector(`[data-hebrew="${correctHebrew}"]`);
-				if (correctBtn) correctBtn.classList.add('correct-show');
-				// Hide wrong answers (keep place, not clickable)
-				[...choiceAreaEl.querySelectorAll('.choice-btn')].forEach(b => {
-					if (b.dataset.hebrew !== correctHebrew) b.classList.add('hidden');
-				});
-				awaitingNextRound = true;
-				mainAreaEl.classList.add('clickable');
+				btn.disabled = true;
+				btn.style.opacity = '0.5';
+				btn.style.cursor = 'default';
+			}
+		}
+
+		// ========== AUDIO HELPERS ==========
+		function speakWord(text) {
+			if ('speechSynthesis' in window) {
+				window.speechSynthesis.cancel(); // Cancel any ongoing speech
+				const utterance = new SpeechSynthesisUtterance(text);
+				utterance.lang = 'en-US';
+				window.speechSynthesis.speak(utterance);
 			}
 		}
 
@@ -509,10 +512,22 @@ Happy birthday	הֶפִּי בֶּרְת'דֵי	יום הולדת שמח
 				loadNewRound();
 				return;
 			}
+			
+			// Always speak the word on click
+			if (currentWord) {
+				speakWord(currentWord.english);
+			}
+
 			if (!suggestionsRevealed) {
 				suggestionsRevealed = true;
 				choiceAreaEl.classList.remove('hidden');
-			} else if (!transliterationRevealed && getCredits() >= 1) {
+			}
+		});
+
+		document.querySelector('.credits-wrap').addEventListener('click', () => {
+			if (awaitingNextRound) return;
+			
+			if (!transliterationRevealed && getCredits() >= 1) {
 				creditsSpent++;
 				transliterationRevealed = true;
 				transliterationEl.textContent = currentWord.transliteration;
