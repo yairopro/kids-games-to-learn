@@ -356,6 +356,7 @@
 		}
 
 		function loadNewRound() {
+			stopAudio();
 			if (currentWord !== null) {
 				roundsCompleted++;
 				updateCreditsUI();
@@ -420,6 +421,19 @@
 		}
 
 		// ========== AUDIO HELPERS ==========
+		let currentAudio = null;
+
+		function stopAudio() {
+			if (currentAudio) {
+				currentAudio.pause();
+				currentAudio.currentTime = 0;
+				currentAudio = null;
+			}
+			if ('speechSynthesis' in window) {
+				window.speechSynthesis.cancel();
+			}
+		}
+
 		function speakWord(text) {
 			if ('speechSynthesis' in window) {
 				window.speechSynthesis.cancel(); // Cancel any ongoing speech
@@ -429,6 +443,26 @@
 			}
 		}
 
+		function playWord(text) {
+			stopAudio();
+
+			const audio = new Audio(`mp3/${encodeURIComponent(text)}.mp3`);
+			currentAudio = audio;
+
+			let fallbackTriggered = false;
+			const triggerFallback = () => {
+				if (fallbackTriggered) return;
+				fallbackTriggered = true;
+				if (currentAudio === audio) {
+					currentAudio = null;
+				}
+				speakWord(text);
+			};
+
+			audio.addEventListener('error', triggerFallback);
+			audio.play().catch(triggerFallback);
+		}
+
 		mainAreaEl.addEventListener('click', () => {
 			if (awaitingNextRound) {
 				if (awaitingAfterCorrect) return;
@@ -436,9 +470,9 @@
 				return;
 			}
 			
-			// Always speak the word on click
+			// Always play the word on click
 			if (currentWord) {
-				speakWord(currentWord.english);
+				playWord(currentWord.english);
 			}
 
 			if (!suggestionsRevealed) {
