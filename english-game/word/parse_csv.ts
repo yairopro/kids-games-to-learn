@@ -5,16 +5,21 @@ const csvFilePath = path.join(__dirname, 'words.csv');
 const jsonFilePath = path.join(__dirname, 'words.json');
 const mp3DirPath = path.join(__dirname, 'mp3');
 
-if (!fs.existsSync(mp3DirPath)) {
-	fs.mkdirSync(mp3DirPath, { recursive: true });
+type Entry = {
+	word: string,
+	transliteration: string,
+	translation: string,
 }
 
-const csvData = fs.readFileSync(csvFilePath, 'utf-8');
-const lines = csvData.split('\n');
-
-const result = [];
-
 async function main() {
+	if (!fs.existsSync(mp3DirPath))
+		fs.mkdirSync(mp3DirPath, { recursive: true });
+
+	const csvData: string = fs.readFileSync(csvFilePath, 'utf-8');
+	const lines = csvData.split('\n');
+
+	const result: Entry[] = [];
+
 	for (const line of lines) {
 		const trimmedLine = line.trim();
 		if (!trimmedLine) continue;
@@ -22,21 +27,19 @@ async function main() {
 		const parts = trimmedLine.split(',');
 		if (parts.length >= 3) {
 			const word = parts[0].trim();
-			const transliteration = parts[1].trim();
-			const translation = parts[2].trim();
+			const translation = parts[1].trim();
+			const transliteration = parts[2].trim();
 
-			result.push({
-				word,
-				transliteration,
-				translation
-			});
+			result.push({ word, transliteration, translation });
 
+			continue;
 			// Fetch mp3
 			const mp3FilePath = path.join(mp3DirPath, `${word}.mp3`);
 			if (!fs.existsSync(mp3FilePath)) {
 				try {
-					console.log(`Fetching audio for "${word}"...`);
-					const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+					const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+					console.log(`Fetching audio for "${word}": ${url}`);
+					const res = await fetch(url);
 					if (res.ok) {
 						const data = await res.json();
 						let audioUrl = '';

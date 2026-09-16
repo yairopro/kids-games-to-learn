@@ -271,87 +271,10 @@
 	</div>
 
 	<script>
-		// ========== DATA: English-Hebrew word pairs ==========
-		const WORDS = `
-Dog	דּוֹג	כֶּלֶב
-Friend	פְרֶנְד	חָבֵר
-New	נְיוּ	חָדָשׁ
-One	וַואן	1
-Two	טוּ	2
-Three	תְ'רִי	3
-Hello	הֶלוֹ	שָׁלוֹם
-Apple	אֶפֶּל	תַּפּוּחַ
-Cake	קֵייק	עוּגָה
-Food	פוּד	אוֹכֶל
-Four	פוֹר	4
-Ice cream	אָיְיס קְרִים	גְּלִידָה
-Milk	מִילְק	חָלָב
-Sandwich	סֶנְדְוִויץ'	סֶנְדְוִויץ'
-Pizza	פִּיצָה	פִּיצָה
-Goodbye	גוּדְבַּאי	לְהִתְרָאוֹת
-Ball	בּוֹל	כַּדּוּר
-Blue	בְּלוּ	כָּחוֹל
-Green	גְרִין	יָרוֹק
-Red	רֶד	אָדוֹם
-White	וַואיְט	לָבָן
-Yellow	יֶלוֹ	צָהוֹב
-Baby	בֵּייבִּי	תִּינוֹק
-Brother	בְּרַאדֶ'ר	אָח
-Dad	דֶאד	אַבָּא
-Family	פֶמִילִי	מִשְׁפָּחָה
-Mom	מַאם	אִמָּא
-Sister	סִיסְטֶר	אָחוֹת
-Bed	בֶּד	מִיטָה
-Chair	צֶ'ר	כִּסֵּא
-Clock	קְלוֹק	שָׁעוֹן
-Five	פַאיְב	5
-House	הַאוּס	בַּיִת
-Table	טֵייבֶּל	שֻׁלְחָן
-Boy	בּוֹי	ילד
-Girl	גֶרְל	ילדה
-Kid	קִיד	ילד
-Learn	לֶרְן	ללמוד
-School	סְקוּל	בית ספר
-Teacher	טִיצֶ'ר	מורה
-Bag	בֶּג	תיק
-Big	בִּיג	גדול
-Book	בּוּק	ספר
-Computer	קַמְפְּיוּטֶר	מחשב
-Pen	פֶּן	עט
-Desk	דֶסְק	שולחן כתיבה
-English	אִינְגְלִישׁ	אנגלית
-Math	מֶת'	חשבון
-Six	סִיקְס	6
-Seven	סֶבֶן	7
-Eight	אֵייט	8
-Nine	נַאיְן	9
-Ten	טֶן	10
-Best	בֶּסְט	הכי טוב
-Eat	אִיט	לאכול
-Fun	פַאן	כיף
-Play	פְּלֵיי	לשחק
-Sing	סִינְג	לשיר
-Talk	טוֹק	לדבר
-Sunday	סַנְדֵי	יום ראשון
-Monday	מַנְדֵי	יום שני
-Tuesday	טְיוּזְדֵי	יום שלישי
-Wednesday	וֶנְזְדֵי	יום רביעי
-Thursday	תְ'רְזְדֵי	יום חמישי
-Friday	פְרַאיְדֵי	יום שישי
-Saturday	סַאטֶרְדֵי	שבת
-Happy birthday	הֶפִּי בֶּרְת'דֵי	יום הולדת שמח
-`;
-		const wordPairs = WORDS
-			.trim()
-			.split('\n')
-			.map(line => line.split('\t').map(s => s.trim()))
-			.filter(parts => parts[0] && parts[2])
-			.map(([english, transliteration, hebrew]) => ({ english: english.toUpperCase(), transliteration, hebrew }));
-
-		// Word scores: higher = more likely to appear. 0 = mastered (no longer shown)
+		// ========== DATA & STATE ==========
+		let wordPairs = [];
 		const INITIAL_SCORE = 10;
 		const wordScores = {};
-		wordPairs.forEach(p => { wordScores[p.english] = INITIAL_SCORE; });
 
 		// ========== STATE ==========
 		let score = 0;
@@ -536,8 +459,35 @@ Happy birthday	הֶפִּי בֶּרְת'דֵי	יום הולדת שמח
 		});
 
 		// ========== INIT ==========
-		updateCreditsUI();
-		loadNewRound();
+		async function initGame() {
+			try {
+				const response = await fetch('words.json');
+				if (!response.ok) {
+					throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+				}
+				const data = await response.json();
+				wordPairs = data.map(item => ({
+					english: item.word,
+					transliteration: item.transliteration,
+					hebrew: item.translation
+				}));
+
+				wordPairs.forEach(p => {
+					wordScores[p.english] = INITIAL_SCORE;
+				});
+
+				updateCreditsUI();
+				loadNewRound();
+			} catch (err) {
+				console.error('Failed to load words.json:', err);
+				englishWordEl.textContent = 'Error';
+				transliterationEl.textContent = 'Failed to load words.json. Please run via a local web server.';
+				mainAreaEl.classList.remove('clickable');
+				choiceAreaEl.classList.add('hidden');
+			}
+		}
+
+		initGame();
 	</script>
 </body>
 
