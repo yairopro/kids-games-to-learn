@@ -52,8 +52,13 @@ async function downloadFile(url: string, destPath: string, maxRetries = 3): Prom
 }
 
 async function main() {
-	if (!fs.existsSync(mp3DirPath))
-		fs.mkdirSync(mp3DirPath, { recursive: true });
+	const enDirPath = path.join(mp3DirPath, 'en');
+	const heDirPath = path.join(mp3DirPath, 'he');
+
+	if (!fs.existsSync(enDirPath))
+		fs.mkdirSync(enDirPath, { recursive: true });
+	if (!fs.existsSync(heDirPath))
+		fs.mkdirSync(heDirPath, { recursive: true });
 
 	const csvData: string = fs.readFileSync(csvFilePath, 'utf-8');
 	const lines = csvData.split('\n');
@@ -72,26 +77,44 @@ async function main() {
 
 			result.push({ word, transliteration, translation });
 
-			// Fetch mp3
-			const mp3FilePath = path.join(mp3DirPath, `${word}.mp3`);
-			if (!fs.existsSync(mp3FilePath)) {
+			// Fetch English mp3
+			const enMp3FilePath = path.join(enDirPath, `${word}.en.mp3`);
+			if (!fs.existsSync(enMp3FilePath)) {
 				try {
 					console.log(`Fetching US audio for "${word}" from Google Translate TTS...`);
 					const audioUrl = getGoogleTtsUrl(word, 'en');
-					const downloaded = await downloadFile(audioUrl, mp3FilePath);
+					const downloaded = await downloadFile(audioUrl, enMp3FilePath);
 					if (downloaded) {
-						console.log(`Saved ${word}.mp3`);
+						console.log(`Saved ${word}.en.mp3`);
 					} else {
-						console.warn(`Failed downloading audio file for "${word}". Skipping.`);
+						console.warn(`Failed downloading English audio file for "${word}". Skipping.`);
 					}
 				} catch (error) {
-					console.warn(`Error processing "${word}":`, error);
+					console.warn(`Error processing English "${word}":`, error);
 				}
-
-				// Small delay between downloads
 				await sleep(500);
 			} else {
-				console.log(`Audio for "${word}" already exists. Skipping.`);
+				console.log(`English audio for "${word}" already exists. Skipping.`);
+			}
+
+			// Fetch Hebrew mp3
+			const heMp3FilePath = path.join(heDirPath, `${word}.he.mp3`);
+			if (!fs.existsSync(heMp3FilePath)) {
+				try {
+					console.log(`Fetching Hebrew audio for "${word}" (${translation}) from Google Translate TTS...`);
+					const audioUrl = getGoogleTtsUrl(translation, 'iw');
+					const downloaded = await downloadFile(audioUrl, heMp3FilePath);
+					if (downloaded) {
+						console.log(`Saved ${word}.he.mp3`);
+					} else {
+						console.warn(`Failed downloading Hebrew audio file for "${word}". Skipping.`);
+					}
+				} catch (error) {
+					console.warn(`Error processing Hebrew "${word}":`, error);
+				}
+				await sleep(500);
+			} else {
+				console.log(`Hebrew audio for "${word}" already exists. Skipping.`);
 			}
 		}
 	}

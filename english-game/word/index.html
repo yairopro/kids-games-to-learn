@@ -446,7 +446,7 @@
 		function playWord(text) {
 			stopAudio();
 
-			const audio = new Audio(`mp3/${encodeURIComponent(text)}.mp3`);
+			const audio = new Audio(`mp3/en/${encodeURIComponent(text)}.en.mp3`);
 			currentAudio = audio;
 
 			let fallbackTriggered = false;
