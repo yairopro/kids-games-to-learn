@@ -523,5 +523,100 @@
     "word": "Slow",
     "transliteration": "סלוֹ",
     "translation": "אִטִּי"
+  },
+  {
+    "word": "Hello",
+    "transliteration": "הֶלוֹ",
+    "translation": "שָׁלוֹם"
+  },
+  {
+    "word": "Goodbye",
+    "transliteration": "גּוּדבַּאי",
+    "translation": "לְהִתְרָאוֹת"
+  },
+  {
+    "word": "Please",
+    "transliteration": "פּלִיז",
+    "translation": "בְּבַקָּשָׁה"
+  },
+  {
+    "word": "Thank you",
+    "transliteration": "תֶּנְק יוּ",
+    "translation": "תּוֹדָה"
+  },
+  {
+    "word": "Boy",
+    "transliteration": "בּוֹי",
+    "translation": "יֶלֶד"
+  },
+  {
+    "word": "Girl",
+    "transliteration": "גֶּרְל",
+    "translation": "יַלְדָּה"
+  },
+  {
+    "word": "Friend",
+    "transliteration": "פרֶנד",
+    "translation": "חָבֵר"
+  },
+  {
+    "word": "House",
+    "transliteration": "הַאוּס",
+    "translation": "בַּיִת"
+  },
+  {
+    "word": "School",
+    "transliteration": "סְקוּל",
+    "translation": "בֵּית סֵפֶר"
+  },
+  {
+    "word": "Room",
+    "transliteration": "רוּם",
+    "translation": "חֶדֶר"
+  },
+  {
+    "word": "Box",
+    "transliteration": "בּוֹקס",
+    "translation": "קוּפְסָה"
+  },
+  {
+    "word": "Shirt",
+    "transliteration": "שֶׁרְט",
+    "translation": "חֻלְצָה"
+  },
+  {
+    "word": "Pants",
+    "transliteration": "פֶּנְטְס",
+    "translation": "מִכְנָסַיִם"
+  },
+  {
+    "word": "Clock",
+    "transliteration": "קְלוֹק",
+    "translation": "שָׁעוֹן"
+  },
+  {
+    "word": "Day",
+    "transliteration": "דֵיי",
+    "translation": "יוֹם"
+  },
+  {
+    "word": "Night",
+    "transliteration": "נָייט",
+    "translation": "לַיְלָה"
+  },
+  {
+    "word": "Open",
+    "transliteration": "אוֹפֶּן",
+    "translation": "לִפְתֹּחַ"
+  },
+  {
+    "word": "Close",
+    "transliteration": "קְלוֹז",
+    "translation": "לִסְגֹּר"
+  },
+  {
+    "word": "Help",
+    "transliteration": "הֶלְפּ",
+    "translation": "עֶזְרָה"
   }
 ]

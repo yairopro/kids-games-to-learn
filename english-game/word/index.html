@@ -408,7 +408,9 @@
 				btn.classList.add('correct', 'correct-show');
 				awaitingNextRound = true;
 				awaitingAfterCorrect = true;
-				setTimeout(loadNewRound, 1500);
+				playSuccessSequence(currentWord, () => {
+					loadNewRound();
+				});
 			} else {
 				score -= 1;
 				wordScores[currentWord.english] = (wordScores[currentWord.english] || INITIAL_SCORE) + 1;
@@ -417,6 +419,9 @@
 				btn.disabled = true;
 				btn.style.opacity = '0.5';
 				btn.style.cursor = 'default';
+				if (navigator.vibrate) {
+					navigator.vibrate(200);
+				}
 			}
 		}
 
@@ -434,33 +439,68 @@
 			}
 		}
 
-		function speakWord(text) {
+		function speakWord(text, lang = 'en-US', onEnded = null) {
 			if ('speechSynthesis' in window) {
-				window.speechSynthesis.cancel(); // Cancel any ongoing speech
+				window.speechSynthesis.cancel();
 				const utterance = new SpeechSynthesisUtterance(text);
-				utterance.lang = 'en-US';
+				utterance.lang = lang;
+				if (onEnded) {
+					utterance.onend = () => onEnded();
+					utterance.onerror = () => onEnded();
+				}
 				window.speechSynthesis.speak(utterance);
+			} else if (onEnded) {
+				onEnded();
 			}
 		}
 
-		function playWord(text) {
+		function playAudioClip(url, fallbackText, fallbackLang = 'en-US', onEnded = null) {
 			stopAudio();
 
-			const audio = new Audio(`mp3/en/${encodeURIComponent(text)}.en.mp3`);
+			let done = false;
+			const finish = () => {
+				if (done) return;
+				done = true;
+				if (onEnded) onEnded();
+			};
+
+			const audio = new Audio(url);
 			currentAudio = audio;
 
-			let fallbackTriggered = false;
 			const triggerFallback = () => {
-				if (fallbackTriggered) return;
-				fallbackTriggered = true;
 				if (currentAudio === audio) {
 					currentAudio = null;
 				}
-				speakWord(text);
+				speakWord(fallbackText, fallbackLang, finish);
 			};
 
+			audio.addEventListener('ended', () => {
+				if (currentAudio === audio) {
+					currentAudio = null;
+				}
+				finish();
+			});
 			audio.addEventListener('error', triggerFallback);
 			audio.play().catch(triggerFallback);
+		}
+
+		function playWord(text) {
+			playAudioClip(`mp3/en/${encodeURIComponent(text)}.en.mp3`, text, 'en-US');
+		}
+
+		function playSuccessSequence(wordObj, onComplete) {
+			const hebrewUrl = `mp3/he/${encodeURIComponent(wordObj.english)}.he.mp3`;
+			const englishUrl = `mp3/en/${encodeURIComponent(wordObj.english)}.en.mp3`;
+
+			playAudioClip(hebrewUrl, wordObj.hebrew, 'he-IL', () => {
+				setTimeout(() => {
+					playAudioClip(englishUrl, wordObj.english, 'en-US', () => {
+						setTimeout(() => {
+							if (onComplete) onComplete();
+						}, 300);
+					});
+				}, 200);
+			});
 		}
 
 		mainAreaEl.addEventListener('click', () => {
