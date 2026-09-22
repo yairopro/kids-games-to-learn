@@ -410,7 +410,7 @@
 				awaitingAfterCorrect = true;
 				setTimeout(loadNewRound, 1500);
 			} else {
-				score -= 10;
+				score -= 1;
 				wordScores[currentWord.english] = (wordScores[currentWord.english] || INITIAL_SCORE) + 1;
 				scoreEl.textContent = score;
 				btn.classList.add('incorrect');
