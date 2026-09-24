@@ -2,7 +2,7 @@
 	"name": "kids-games-to-learn",
 	"version": "1.0.0",
 	"scripts": {
-		"deploy": "git add --all && git commit -m \"chore\" && git push && firebase deploy"
+		"deploy": "./deploy.sh"
 	},
 	"repository": "git@github.com:yairopro/kids-games-to-learn.git",
 	"author": "yair <yairopro@gmail.com>",
