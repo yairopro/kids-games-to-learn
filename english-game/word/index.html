@@ -666,7 +666,8 @@
 					loadNewRound();
 				});
 			} else {
-				score -= 1;
+				const penalty = score < 0 ? 1 : Math.max(1, Math.trunc(score / 10) + 1);
+				score -= penalty;
 				wordScores[currentWord.english] = (wordScores[currentWord.english] || INITIAL_SCORE) + 1;
 				wordStats[currentWord.english].fails = (wordStats[currentWord.english].fails || 0) + 1;
 				saveGameData();
