@@ -496,7 +496,7 @@
 			const hebrewUrl = `mp3/he/${encodeURIComponent(wordObj.english)}.he.mp3`;
 			const englishUrl = `mp3/en/${encodeURIComponent(wordObj.english)}.en.mp3`;
 
-			playAudioClip('mp3/right.effect.wav', '', 'en-US', () => {
+			playAudioClip('mp3/right.effect.mp3', '', 'en-US', () => {
 				audioSequenceTimer = setTimeout(() => {
 					playAudioClip(hebrewUrl, wordObj.hebrew, 'he-IL', () => {
 						audioSequenceTimer = setTimeout(() => {
