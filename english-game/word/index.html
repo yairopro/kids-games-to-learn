@@ -45,11 +45,9 @@
 			position: absolute;
 			inset: 0;
 			border-radius: 50%;
-			background: conic-gradient(
-				#4ade80 0deg,
-				#4ade80 calc(var(--progress, 0) * 360deg),
-				rgba(255, 255, 255, 0.3) calc(var(--progress, 0) * 360deg)
-			);
+			background: conic-gradient(#4ade80 0deg,
+					#4ade80 calc(var(--progress, 0) * 360deg),
+					rgba(255, 255, 255, 0.3) calc(var(--progress, 0) * 360deg));
 			transition: background 0.3s ease;
 		}
 
@@ -514,10 +512,8 @@
 		}
 
 		function playWrongSequence(englishWord) {
-			playAudioClip('mp3/wrong.effect.wav', '', 'en-US', () => {
-				audioSequenceTimer = setTimeout(() => {
-					playWord(englishWord);
-				}, 150);
+			playAudioClip('mp3/wrong.effect.mp3', '', 'en-US', () => {
+				audioSequenceTimer = setTimeout(() => playWord(englishWord));
 			});
 		}
 
@@ -527,7 +523,7 @@
 				loadNewRound();
 				return;
 			}
-			
+
 			// Always play the word on click
 			if (currentWord) {
 				playWord(currentWord.english);
@@ -541,7 +537,7 @@
 
 		document.querySelector('.credits-wrap').addEventListener('click', () => {
 			if (awaitingNextRound) return;
-			
+
 			if (!transliterationRevealed && getCredits() >= 1) {
 				creditsSpent++;
 				transliterationRevealed = true;
