@@ -192,6 +192,196 @@
 			flex: 1;
 		}
 
+		.save-badge {
+			font-size: 0.95rem;
+			font-weight: 600;
+			color: #fff;
+			background: rgba(255, 255, 255, 0.25);
+			padding: 8px 14px;
+			border-radius: 999px;
+			max-width: 140px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+		}
+
+		.modal-tabs {
+			display: flex;
+			border-bottom: 1px solid #eee;
+			background: #fafafa;
+		}
+
+		.modal-tab-btn {
+			flex: 1;
+			padding: 12px 16px;
+			font-size: 1rem;
+			font-weight: 600;
+			color: #666;
+			border: none;
+			background: transparent;
+			cursor: pointer;
+			border-bottom: 3px solid transparent;
+			transition: color 0.2s, border-color 0.2s;
+		}
+
+		.modal-tab-btn.active {
+			color: #667eea;
+			border-bottom-color: #667eea;
+			background: #fff;
+		}
+
+		.tab-content {
+			display: none;
+		}
+
+		.tab-content.active {
+			display: block;
+		}
+
+		/* Saves Manager Styles */
+		.save-create-box {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 16px;
+		}
+
+		.save-create-box input {
+			flex: 1;
+			padding: 9px 12px;
+			border: 1px solid #d1d5db;
+			border-radius: 10px;
+			font-size: 0.95rem;
+			outline: none;
+		}
+
+		.save-create-box input:focus {
+			border-color: #667eea;
+			box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+		}
+
+		.save-create-box button {
+			padding: 9px 16px;
+			background: #667eea;
+			color: #fff;
+			border: none;
+			border-radius: 10px;
+			font-weight: 600;
+			cursor: pointer;
+			white-space: nowrap;
+		}
+
+		.save-create-box button:hover {
+			background: #5a67d8;
+		}
+
+		.saves-list {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.save-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 12px 14px;
+			border-radius: 12px;
+			border: 1px solid #e5e7eb;
+			background: #f9fafb;
+			transition: all 0.15s;
+		}
+
+		.save-item.active {
+			border-color: #667eea;
+			background: #eef2ff;
+		}
+
+		.save-info {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			min-width: 0;
+			flex: 1;
+		}
+
+		.save-title-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.save-name {
+			font-weight: 700;
+			color: #1f2937;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.active-tag {
+			font-size: 0.72rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			color: #4338ca;
+			background: #c7d2fe;
+			padding: 2px 7px;
+			border-radius: 999px;
+		}
+
+		.save-meta {
+			font-size: 0.8rem;
+			color: #6b7280;
+		}
+
+		.save-actions {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-left: 10px;
+		}
+
+		.btn-save-action {
+			padding: 6px 10px;
+			border-radius: 6px;
+			font-size: 0.85rem;
+			font-weight: 600;
+			border: 1px solid transparent;
+			cursor: pointer;
+		}
+
+		.btn-load {
+			background: #667eea;
+			color: #fff;
+		}
+
+		.btn-load:hover {
+			background: #5a67d8;
+		}
+
+		.btn-rename {
+			background: #e5e7eb;
+			color: #374151;
+		}
+
+		.btn-rename:hover {
+			background: #d1d5db;
+		}
+
+		.btn-delete {
+			background: #fee2e2;
+			color: #dc2626;
+		}
+
+		.btn-delete:hover:not(:disabled) {
+			background: #fecaca;
+		}
+
+		.btn-delete:disabled {
+			opacity: 0.4;
+			cursor: not-allowed;
+		}
+
 		.stats-table {
 			width: 100%;
 			border-collapse: collapse;
@@ -227,29 +417,7 @@
 			color: #dc2626;
 		}
 
-		.modal-footer {
-			padding: 16px 24px;
-			border-top: 1px solid #eee;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background: #fafafa;
-		}
 
-		.clear-btn {
-			background: #fee2e2;
-			color: #dc2626;
-			border: 1px solid #fca5a5;
-			padding: 8px 16px;
-			border-radius: 8px;
-			font-weight: 600;
-			cursor: pointer;
-			transition: background 0.15s;
-		}
-
-		.clear-btn:hover {
-			background: #fecaca;
-		}
 
 		/* Main Area - English Word */
 		.main-area {
@@ -428,6 +596,7 @@
 			</div>
 		</div>
 		<div class="top-bar-right">
+			<span class="save-badge" id="active-save-badge" title="Active Save Profile">Default</span>
 			<button class="gear-btn" id="gear-btn" aria-label="Settings and Monitoring" title="Settings and Monitoring">
 				<svg viewBox="0 0 24 24">
 					<path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
@@ -441,27 +610,40 @@
 	<div class="modal-overlay" id="monitoring-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
 		<div class="modal-card">
 			<div class="modal-header">
-				<h3 id="modal-title">Word Monitoring</h3>
+				<h3 id="modal-title">Settings & Saves</h3>
 				<button class="modal-close-btn" id="modal-close-btn" aria-label="Close">&times;</button>
 			</div>
+			<div class="modal-tabs">
+				<button class="modal-tab-btn active" id="tab-btn-saves" data-tab="tab-saves">Save Profiles</button>
+				<button class="modal-tab-btn" id="tab-btn-stats" data-tab="tab-stats">Word Monitoring</button>
+			</div>
 			<div class="modal-body">
-				<table class="stats-table">
-					<thead>
-						<tr>
-							<th>Word</th>
-							<th style="text-align: center;">Weight</th>
-							<th style="text-align: center;">Successes</th>
-							<th style="text-align: center;">Fails</th>
-						</tr>
-					</thead>
-					<tbody id="stats-tbody">
-						<!-- Rows inserted by JS -->
-					</tbody>
-				</table>
+				<div class="tab-content active" id="tab-saves">
+					<div class="save-create-box">
+						<input type="text" id="new-save-name-input" placeholder="New save name..." maxlength="25" />
+						<button id="create-save-btn">New Save</button>
+					</div>
+					<div class="saves-list" id="saves-list">
+						<!-- Save profile cards inserted by JS -->
+					</div>
+				</div>
+				<div class="tab-content" id="tab-stats">
+					<table class="stats-table">
+						<thead>
+							<tr>
+								<th>Word</th>
+								<th style="text-align: center;">Weight</th>
+								<th style="text-align: center;">Successes</th>
+								<th style="text-align: center;">Fails</th>
+							</tr>
+						</thead>
+						<tbody id="stats-tbody">
+							<!-- Rows inserted by JS -->
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<div class="modal-footer">
-				<button class="clear-btn" id="clear-stats-btn">Clear All Stats</button>
-			</div>
+
 		</div>
 	</div>
 
@@ -479,6 +661,8 @@
 	<script>
 		// ========== DATA & STATE ==========
 		const STORAGE_KEY = 'kids_word_game_stats_v1';
+		const SAVES_KEY = 'kids_word_game_saves_v1';
+		const ACTIVE_SAVE_KEY = 'kids_word_game_active_save_v1';
 		let wordPairs = [];
 		const INITIAL_WEIGHT = 10;
 		let wordStats = {}; // { [english]: { successes: 0, fails: 0 } }
@@ -495,8 +679,12 @@
 		let roundsCompleted = 0;
 		let creditsSpent = 0;
 
+		let activeSaveId = null;
+		let savesMap = {}; // { [id]: { id, name, score, roundsCompleted, creditsSpent, wordStats, updatedAt } }
+
 		// ========== DOM ELEMENTS ==========
 		const scoreEl = document.querySelector('.score');
+		const activeSaveBadgeEl = document.getElementById('active-save-badge');
 		const creditsCountEl = document.getElementById('credits-count');
 		const creditsProgressEl = document.getElementById('credits-progress');
 		const englishWordEl = document.getElementById('english-word');
@@ -506,38 +694,243 @@
 		const gearBtn = document.getElementById('gear-btn');
 		const monitoringModal = document.getElementById('monitoring-modal');
 		const modalCloseBtn = document.getElementById('modal-close-btn');
+		const tabBtnSaves = document.getElementById('tab-btn-saves');
+		const tabBtnStats = document.getElementById('tab-btn-stats');
+		const tabContentSaves = document.getElementById('tab-saves');
+		const tabContentStats = document.getElementById('tab-stats');
+		const savesListEl = document.getElementById('saves-list');
+		const newSaveNameInput = document.getElementById('new-save-name-input');
+		const createSaveBtn = document.getElementById('create-save-btn');
 		const statsTbody = document.getElementById('stats-tbody');
-		const clearStatsBtn = document.getElementById('clear-stats-btn');
 
-		// ========== STORAGE ==========
-		function loadSavedData() {
+
+		// ========== STORAGE & SAVES ==========
+		function generateSaveId() {
+			return 'save_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+		}
+
+		function persistSavesMap() {
 			try {
-				const saved = localStorage.getItem(STORAGE_KEY);
-				if (!saved) return;
-				const parsed = JSON.parse(saved);
-				if (typeof parsed.score === 'number') score = parsed.score;
-				if (typeof parsed.roundsCompleted === 'number') roundsCompleted = parsed.roundsCompleted;
-				if (typeof parsed.creditsSpent === 'number') creditsSpent = parsed.creditsSpent;
-				if (parsed.wordStats && typeof parsed.wordStats === 'object') {
-					wordStats = parsed.wordStats;
+				localStorage.setItem(SAVES_KEY, JSON.stringify(savesMap));
+				if (activeSaveId) {
+					localStorage.setItem(ACTIVE_SAVE_KEY, activeSaveId);
 				}
 			} catch (e) {
-				console.warn('Failed to load stats from localStorage:', e);
+				console.warn('Failed to persist saves map:', e);
+			}
+		}
+
+		function loadSavedData() {
+			try {
+				const savedSaves = localStorage.getItem(SAVES_KEY);
+				if (savedSaves) {
+					savesMap = JSON.parse(savedSaves) || {};
+				}
+			} catch (e) {
+				console.warn('Failed to load saves map:', e);
+				savesMap = {};
+			}
+
+			// Migration of legacy single-save data if saves map is empty
+			if (Object.keys(savesMap).length === 0) {
+				let legacyScore = 0;
+				let legacyRounds = 0;
+				let legacyCredits = 0;
+				let legacyStats = {};
+				try {
+					const legacy = localStorage.getItem(STORAGE_KEY);
+					if (legacy) {
+						const parsed = JSON.parse(legacy);
+						if (typeof parsed.score === 'number') legacyScore = parsed.score;
+						if (typeof parsed.roundsCompleted === 'number') legacyRounds = parsed.roundsCompleted;
+						if (typeof parsed.creditsSpent === 'number') legacyCredits = parsed.creditsSpent;
+						if (parsed.wordStats && typeof parsed.wordStats === 'object') legacyStats = parsed.wordStats;
+					}
+				} catch (e) {
+					console.warn('Failed to parse legacy save:', e);
+				}
+
+				const defaultId = generateSaveId();
+				savesMap[defaultId] = {
+					id: defaultId,
+					name: 'Default',
+					score: legacyScore,
+					roundsCompleted: legacyRounds,
+					creditsSpent: legacyCredits,
+					wordStats: legacyStats,
+					updatedAt: Date.now()
+				};
+				activeSaveId = defaultId;
+				persistSavesMap();
+			} else {
+				const savedActiveId = localStorage.getItem(ACTIVE_SAVE_KEY);
+				if (savedActiveId && savesMap[savedActiveId]) {
+					activeSaveId = savedActiveId;
+				} else {
+					activeSaveId = Object.keys(savesMap)[0];
+					persistSavesMap();
+				}
+			}
+
+			applyCurrentSaveData();
+		}
+
+		function applyCurrentSaveData() {
+			const current = savesMap[activeSaveId];
+			if (!current) return;
+			score = current.score || 0;
+			roundsCompleted = current.roundsCompleted || 0;
+			creditsSpent = current.creditsSpent || 0;
+			wordStats = current.wordStats || {};
+			if (activeSaveBadgeEl) {
+				activeSaveBadgeEl.textContent = current.name;
+				activeSaveBadgeEl.title = 'Active Save: ' + current.name;
 			}
 		}
 
 		function saveGameData() {
+			if (!activeSaveId || !savesMap[activeSaveId]) return;
+			savesMap[activeSaveId].score = score;
+			savesMap[activeSaveId].roundsCompleted = roundsCompleted;
+			savesMap[activeSaveId].creditsSpent = creditsSpent;
+			savesMap[activeSaveId].wordStats = wordStats;
+			savesMap[activeSaveId].updatedAt = Date.now();
+			persistSavesMap();
+			// Also sync legacy key for backwards compatibility
 			try {
-				const data = {
+				localStorage.setItem(STORAGE_KEY, JSON.stringify({
 					score,
 					roundsCompleted,
 					creditsSpent,
 					wordStats
-				};
-				localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-			} catch (e) {
-				console.warn('Failed to save to localStorage:', e);
+				}));
+			} catch (e) {}
+		}
+
+		function createNewSave(name) {
+			const cleanName = (name || '').trim();
+			if (!cleanName) return;
+			const newId = generateSaveId();
+			savesMap[newId] = {
+				id: newId,
+				name: cleanName,
+				score: 0,
+				roundsCompleted: 0,
+				creditsSpent: 0,
+				wordStats: {},
+				updatedAt: Date.now()
+			};
+			loadSaveProfile(newId);
+		}
+
+		function loadSaveProfile(id) {
+			if (!savesMap[id]) return;
+			activeSaveId = id;
+			persistSavesMap();
+			applyCurrentSaveData();
+			scoreEl.textContent = score;
+			updateCreditsUI();
+			renderSavesList();
+			renderMonitoringTable();
+			loadNewRound();
+		}
+
+		function renameSaveProfile(id, newName) {
+			const cleanName = (newName || '').trim();
+			if (!cleanName || !savesMap[id]) return;
+			savesMap[id].name = cleanName;
+			savesMap[id].updatedAt = Date.now();
+			persistSavesMap();
+			if (id === activeSaveId && activeSaveBadgeEl) {
+				activeSaveBadgeEl.textContent = cleanName;
+				activeSaveBadgeEl.title = 'Active Save: ' + cleanName;
 			}
+			renderSavesList();
+		}
+
+		function deleteSaveProfile(id) {
+			if (id === activeSaveId) {
+				alert('Cannot delete the currently active save.');
+				return;
+			}
+			if (!savesMap[id]) return;
+			if (!confirm(`Are you sure you want to delete save "${savesMap[id].name}"?`)) return;
+			delete savesMap[id];
+			persistSavesMap();
+			renderSavesList();
+		}
+
+		function renderSavesList() {
+			if (!savesListEl) return;
+			savesListEl.innerHTML = '';
+			const savesArr = Object.values(savesMap).sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' }));
+
+			savesArr.forEach(save => {
+				const isActive = save.id === activeSaveId;
+				const item = document.createElement('div');
+				item.className = 'save-item' + (isActive ? ' active' : '');
+
+				const info = document.createElement('div');
+				info.className = 'save-info';
+
+				const titleRow = document.createElement('div');
+				titleRow.className = 'save-title-row';
+
+				const nameSpan = document.createElement('span');
+				nameSpan.className = 'save-name';
+				nameSpan.textContent = save.name;
+
+				titleRow.appendChild(nameSpan);
+				if (isActive) {
+					const activeTag = document.createElement('span');
+					activeTag.className = 'active-tag';
+					activeTag.textContent = 'Active';
+					titleRow.appendChild(activeTag);
+				}
+
+				const metaSpan = document.createElement('span');
+				metaSpan.className = 'save-meta';
+				const wordsLearned = Object.values(save.wordStats || {}).filter(st => (st.successes || 0) > 0).length;
+				metaSpan.textContent = `Score: ${save.score || 0} • Rounds: ${save.roundsCompleted || 0} • Words practiced: ${wordsLearned}`;
+
+				info.appendChild(titleRow);
+				info.appendChild(metaSpan);
+
+				const actions = document.createElement('div');
+				actions.className = 'save-actions';
+
+				if (!isActive) {
+					const loadBtn = document.createElement('button');
+					loadBtn.className = 'btn-save-action btn-load';
+					loadBtn.textContent = 'Load';
+					loadBtn.addEventListener('click', () => loadSaveProfile(save.id));
+					actions.appendChild(loadBtn);
+				}
+
+				const renameBtn = document.createElement('button');
+				renameBtn.className = 'btn-save-action btn-rename';
+				renameBtn.textContent = 'Rename';
+				renameBtn.addEventListener('click', () => {
+					const newName = prompt('Enter new name for save:', save.name);
+					if (newName && newName.trim()) {
+						renameSaveProfile(save.id, newName.trim());
+					}
+				});
+				actions.appendChild(renameBtn);
+
+				const deleteBtn = document.createElement('button');
+				deleteBtn.className = 'btn-save-action btn-delete';
+				deleteBtn.textContent = 'Delete';
+				deleteBtn.disabled = isActive;
+				if (!isActive) {
+					deleteBtn.addEventListener('click', () => deleteSaveProfile(save.id));
+				}
+				actions.appendChild(deleteBtn);
+
+				item.appendChild(info);
+				item.appendChild(actions);
+				savesListEl.appendChild(item);
+			});
 		}
 
 		// ========== CREDITS ==========
@@ -845,7 +1238,43 @@
 			});
 		}
 
+		// ========== TABS & MODAL ==========
+		function switchModalTab(tabName) {
+			if (tabName === 'tab-saves') {
+				tabBtnSaves.classList.add('active');
+				tabBtnStats.classList.remove('active');
+				tabContentSaves.classList.add('active');
+				tabContentStats.classList.remove('active');
+			} else {
+				tabBtnStats.classList.add('active');
+				tabBtnSaves.classList.remove('active');
+				tabContentStats.classList.add('active');
+				tabContentSaves.classList.remove('active');
+				renderMonitoringTable();
+			}
+		}
+
+		tabBtnSaves.addEventListener('click', () => switchModalTab('tab-saves'));
+		tabBtnStats.addEventListener('click', () => switchModalTab('tab-stats'));
+
+		createSaveBtn.addEventListener('click', () => {
+			const name = newSaveNameInput.value.trim();
+			if (!name) return;
+			createNewSave(name);
+			newSaveNameInput.value = '';
+		});
+
+		newSaveNameInput.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				const name = newSaveNameInput.value.trim();
+				if (!name) return;
+				createNewSave(name);
+				newSaveNameInput.value = '';
+			}
+		});
+
 		function openModal() {
+			renderSavesList();
 			renderMonitoringTable();
 			monitoringModal.classList.add('open');
 		}
@@ -868,17 +1297,7 @@
 			}
 		});
 
-		clearStatsBtn.addEventListener('click', () => {
-			if (!confirm('Are you sure you want to reset all stats, score, and credits?')) return;
-			localStorage.removeItem(STORAGE_KEY);
-			score = 0;
-			roundsCompleted = 0;
-			creditsSpent = 0;
-			wordStats = {};
-			scoreEl.textContent = score;
-			updateCreditsUI();
-			renderMonitoringTable();
-		});
+
 
 		// ========== INIT ==========
 		async function initGame() {
