@@ -480,8 +480,7 @@
 		// ========== DATA & STATE ==========
 		const STORAGE_KEY = 'kids_word_game_stats_v1';
 		let wordPairs = [];
-		const INITIAL_SCORE = 10;
-		const wordScores = {};
+		const INITIAL_WEIGHT = 10;
 		let wordStats = {}; // { [english]: { successes: 0, fails: 0 } }
 
 		// ========== STATE ==========
@@ -519,9 +518,6 @@
 				if (typeof parsed.score === 'number') score = parsed.score;
 				if (typeof parsed.roundsCompleted === 'number') roundsCompleted = parsed.roundsCompleted;
 				if (typeof parsed.creditsSpent === 'number') creditsSpent = parsed.creditsSpent;
-				if (parsed.wordScores && typeof parsed.wordScores === 'object') {
-					Object.assign(wordScores, parsed.wordScores);
-				}
 				if (parsed.wordStats && typeof parsed.wordStats === 'object') {
 					wordStats = parsed.wordStats;
 				}
@@ -536,7 +532,6 @@
 					score,
 					roundsCompleted,
 					creditsSpent,
-					wordScores,
 					wordStats
 				};
 				localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -564,6 +559,14 @@
 		}
 
 		// ========== HELPERS ==========
+		function getWordWeight(english) {
+			const st = wordStats[english];
+			if (!st) return INITIAL_WEIGHT;
+			const successes = st.successes || 0;
+			const fails = st.fails || 0;
+			return Math.max(0, INITIAL_WEIGHT + fails - successes);
+		}
+
 		function shuffleArray(arr) {
 			const copy = [...arr];
 			for (let i = copy.length - 1; i > 0; i--) {
@@ -580,16 +583,16 @@
 		}
 
 		function getAvailableWords() {
-			return wordPairs.filter(p => wordScores[p.english] > 0);
+			return wordPairs.filter(p => getWordWeight(p.english) > 0);
 		}
 
 		function pickWordByWeight() {
 			const available = getAvailableWords();
 			if (available.length === 0) return null;
-			const total = available.reduce((sum, p) => sum + wordScores[p.english], 0);
+			const total = available.reduce((sum, p) => sum + getWordWeight(p.english), 0);
 			let r = Math.random() * total;
 			for (const p of available) {
-				r -= wordScores[p.english];
+				r -= getWordWeight(p.english);
 				if (r <= 0) return p;
 			}
 			return available[available.length - 1];
@@ -656,7 +659,6 @@
 
 			if (chosen === correctHebrew) {
 				score += 1;
-				wordScores[currentWord.english] = Math.max(0, wordScores[currentWord.english] - 1);
 				wordStats[currentWord.english].successes = (wordStats[currentWord.english].successes || 0) + 1;
 				saveGameData();
 				scoreEl.textContent = score;
@@ -669,7 +671,6 @@
 			} else {
 				const penalty = score < 0 ? 1 : Math.max(1, Math.trunc(score / 10) + 1);
 				score -= penalty;
-				wordScores[currentWord.english] = (wordScores[currentWord.english] || INITIAL_SCORE) + 1;
 				wordStats[currentWord.english].fails = (wordStats[currentWord.english].fails || 0) + 1;
 				saveGameData();
 				scoreEl.textContent = score;
@@ -826,7 +827,7 @@
 
 				const tdWeight = document.createElement('td');
 				tdWeight.className = 'num';
-				tdWeight.textContent = wordScores[p.english] !== undefined ? wordScores[p.english] : INITIAL_SCORE;
+				tdWeight.textContent = getWordWeight(p.english);
 
 				const tdSuccess = document.createElement('td');
 				tdSuccess.className = 'num num-success';
@@ -873,9 +874,6 @@
 			score = 0;
 			roundsCompleted = 0;
 			creditsSpent = 0;
-			wordPairs.forEach(p => {
-				wordScores[p.english] = INITIAL_SCORE;
-			});
 			wordStats = {};
 			scoreEl.textContent = score;
 			updateCreditsUI();
@@ -895,10 +893,6 @@
 					transliteration: item.transliteration,
 					hebrew: item.translation
 				}));
-
-				wordPairs.forEach(p => {
-					wordScores[p.english] = INITIAL_SCORE;
-				});
 
 				loadSavedData();
 				scoreEl.textContent = score;
