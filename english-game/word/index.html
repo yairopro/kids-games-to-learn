@@ -422,13 +422,19 @@
 				if (navigator.vibrate) {
 					navigator.vibrate(200);
 				}
+				playWrongSequence(currentWord.english);
 			}
 		}
 
 		// ========== AUDIO HELPERS ==========
 		let currentAudio = null;
+		let audioSequenceTimer = null;
 
 		function stopAudio() {
+			if (audioSequenceTimer) {
+				clearTimeout(audioSequenceTimer);
+				audioSequenceTimer = null;
+			}
 			if (currentAudio) {
 				currentAudio.pause();
 				currentAudio.currentTime = 0;
@@ -493,13 +499,21 @@
 			const englishUrl = `mp3/en/${encodeURIComponent(wordObj.english)}.en.mp3`;
 
 			playAudioClip(hebrewUrl, wordObj.hebrew, 'he-IL', () => {
-				setTimeout(() => {
+				audioSequenceTimer = setTimeout(() => {
 					playAudioClip(englishUrl, wordObj.english, 'en-US', () => {
-						setTimeout(() => {
+						audioSequenceTimer = setTimeout(() => {
 							if (onComplete) onComplete();
 						}, 300);
 					});
 				}, 200);
+			});
+		}
+
+		function playWrongSequence(englishWord) {
+			playAudioClip('mp3/wrong.effect.wav', '', 'en-US', () => {
+				audioSequenceTimer = setTimeout(() => {
+					playWord(englishWord);
+				}, 150);
 			});
 		}
 
