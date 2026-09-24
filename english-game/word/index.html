@@ -449,6 +449,7 @@
 					<thead>
 						<tr>
 							<th>Word</th>
+							<th style="text-align: center;">Weight</th>
 							<th style="text-align: center;">Successes</th>
 							<th style="text-align: center;">Fails</th>
 						</tr>
@@ -823,6 +824,10 @@
 				const tdWord = document.createElement('td');
 				tdWord.textContent = p.english;
 
+				const tdWeight = document.createElement('td');
+				tdWeight.className = 'num';
+				tdWeight.textContent = wordScores[p.english] !== undefined ? wordScores[p.english] : INITIAL_SCORE;
+
 				const tdSuccess = document.createElement('td');
 				tdSuccess.className = 'num num-success';
 				tdSuccess.textContent = st.successes || 0;
@@ -832,6 +837,7 @@
 				tdFail.textContent = st.fails || 0;
 
 				tr.appendChild(tdWord);
+				tr.appendChild(tdWeight);
 				tr.appendChild(tdSuccess);
 				tr.appendChild(tdFail);
 				statsTbody.appendChild(tr);
