@@ -78,6 +78,179 @@
 			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 		}
 
+		.top-bar-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.gear-btn {
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			border: none;
+			background: rgba(255, 255, 255, 0.2);
+			color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+			transition: transform 0.2s, background 0.2s;
+		}
+
+		.gear-btn:hover {
+			transform: rotate(30deg) scale(1.05);
+			background: rgba(255, 255, 255, 0.35);
+		}
+
+		.gear-btn:active {
+			transform: scale(0.95);
+		}
+
+		.gear-btn svg {
+			width: 24px;
+			height: 24px;
+			fill: currentColor;
+		}
+
+		/* Modal */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.55);
+			backdrop-filter: blur(4px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1000;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.25s ease;
+			padding: 20px;
+		}
+
+		.modal-overlay.open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.modal-card {
+			background: #fff;
+			width: 100%;
+			max-width: 540px;
+			max-height: 85vh;
+			border-radius: 24px;
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+			animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		}
+
+		@keyframes popIn {
+			from {
+				transform: scale(0.92);
+			}
+			to {
+				transform: scale(1);
+			}
+		}
+
+		.modal-header {
+			padding: 20px 24px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid #eee;
+		}
+
+		.modal-header h3 {
+			font-size: 1.4rem;
+			color: #333;
+		}
+
+		.modal-close-btn {
+			border: none;
+			background: transparent;
+			font-size: 1.8rem;
+			line-height: 1;
+			cursor: pointer;
+			color: #888;
+			padding: 4px 8px;
+			border-radius: 8px;
+		}
+
+		.modal-close-btn:hover {
+			color: #111;
+			background: #f1f1f1;
+		}
+
+		.modal-body {
+			padding: 16px 24px;
+			overflow-y: auto;
+			flex: 1;
+		}
+
+		.stats-table {
+			width: 100%;
+			border-collapse: collapse;
+			text-align: left;
+			font-size: 0.95rem;
+		}
+
+		.stats-table th,
+		.stats-table td {
+			padding: 10px 12px;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.stats-table th {
+			background: #fafafa;
+			color: #666;
+			font-weight: 600;
+			position: sticky;
+			top: 0;
+			z-index: 1;
+		}
+
+		.stats-table td.num {
+			text-align: center;
+			font-weight: 600;
+		}
+
+		.stats-table td.num-success {
+			color: #16a34a;
+		}
+
+		.stats-table td.num-fail {
+			color: #dc2626;
+		}
+
+		.modal-footer {
+			padding: 16px 24px;
+			border-top: 1px solid #eee;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #fafafa;
+		}
+
+		.clear-btn {
+			background: #fee2e2;
+			color: #dc2626;
+			border: 1px solid #fca5a5;
+			padding: 8px 16px;
+			border-radius: 8px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: background 0.15s;
+		}
+
+		.clear-btn:hover {
+			background: #fecaca;
+		}
+
 		/* Main Area - English Word */
 		.main-area {
 			width: 100%;
@@ -254,7 +427,41 @@
 				<span class="credits-count" id="credits-count">0</span>
 			</div>
 		</div>
-		<span class="score">0</span>
+		<div class="top-bar-right">
+			<button class="gear-btn" id="gear-btn" aria-label="Settings and Monitoring" title="Settings and Monitoring">
+				<svg viewBox="0 0 24 24">
+					<path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+				</svg>
+			</button>
+			<span class="score">0</span>
+		</div>
+	</div>
+
+	<!-- Monitoring Modal -->
+	<div class="modal-overlay" id="monitoring-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+		<div class="modal-card">
+			<div class="modal-header">
+				<h3 id="modal-title">Word Monitoring</h3>
+				<button class="modal-close-btn" id="modal-close-btn" aria-label="Close">&times;</button>
+			</div>
+			<div class="modal-body">
+				<table class="stats-table">
+					<thead>
+						<tr>
+							<th>Word</th>
+							<th style="text-align: center;">Successes</th>
+							<th style="text-align: center;">Fails</th>
+						</tr>
+					</thead>
+					<tbody id="stats-tbody">
+						<!-- Rows inserted by JS -->
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button class="clear-btn" id="clear-stats-btn">Clear All Stats</button>
+			</div>
+		</div>
 	</div>
 
 	<!-- Main Area: English Word -->
@@ -270,9 +477,11 @@
 
 	<script>
 		// ========== DATA & STATE ==========
+		const STORAGE_KEY = 'kids_word_game_stats_v1';
 		let wordPairs = [];
 		const INITIAL_SCORE = 10;
 		const wordScores = {};
+		let wordStats = {}; // { [english]: { successes: 0, fails: 0 } }
 
 		// ========== STATE ==========
 		let score = 0;
@@ -294,6 +503,46 @@
 		const transliterationEl = document.getElementById('transliteration');
 		const mainAreaEl = document.querySelector('.main-area');
 		const choiceAreaEl = document.getElementById('choice-area');
+		const gearBtn = document.getElementById('gear-btn');
+		const monitoringModal = document.getElementById('monitoring-modal');
+		const modalCloseBtn = document.getElementById('modal-close-btn');
+		const statsTbody = document.getElementById('stats-tbody');
+		const clearStatsBtn = document.getElementById('clear-stats-btn');
+
+		// ========== STORAGE ==========
+		function loadSavedData() {
+			try {
+				const saved = localStorage.getItem(STORAGE_KEY);
+				if (!saved) return;
+				const parsed = JSON.parse(saved);
+				if (typeof parsed.score === 'number') score = parsed.score;
+				if (typeof parsed.roundsCompleted === 'number') roundsCompleted = parsed.roundsCompleted;
+				if (typeof parsed.creditsSpent === 'number') creditsSpent = parsed.creditsSpent;
+				if (parsed.wordScores && typeof parsed.wordScores === 'object') {
+					Object.assign(wordScores, parsed.wordScores);
+				}
+				if (parsed.wordStats && typeof parsed.wordStats === 'object') {
+					wordStats = parsed.wordStats;
+				}
+			} catch (e) {
+				console.warn('Failed to load stats from localStorage:', e);
+			}
+		}
+
+		function saveGameData() {
+			try {
+				const data = {
+					score,
+					roundsCompleted,
+					creditsSpent,
+					wordScores,
+					wordStats
+				};
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+			} catch (e) {
+				console.warn('Failed to save to localStorage:', e);
+			}
+		}
 
 		// ========== CREDITS ==========
 		function getCreditsEarned() {
@@ -358,6 +607,7 @@
 			if (currentWord !== null) {
 				roundsCompleted++;
 				updateCreditsUI();
+				saveGameData();
 			}
 			awaitingNextRound = false;
 			awaitingAfterCorrect = false;
@@ -399,9 +649,15 @@
 			const btn = e.target;
 			const chosen = btn.dataset.hebrew;
 
+			if (!wordStats[currentWord.english]) {
+				wordStats[currentWord.english] = { successes: 0, fails: 0 };
+			}
+
 			if (chosen === correctHebrew) {
 				score += 1;
 				wordScores[currentWord.english] = Math.max(0, wordScores[currentWord.english] - 1);
+				wordStats[currentWord.english].successes = (wordStats[currentWord.english].successes || 0) + 1;
+				saveGameData();
 				scoreEl.textContent = score;
 				btn.classList.add('correct', 'correct-show');
 				awaitingNextRound = true;
@@ -412,6 +668,8 @@
 			} else {
 				score -= 1;
 				wordScores[currentWord.english] = (wordScores[currentWord.english] || INITIAL_SCORE) + 1;
+				wordStats[currentWord.english].fails = (wordStats[currentWord.english].fails || 0) + 1;
+				saveGameData();
 				scoreEl.textContent = score;
 				btn.classList.add('incorrect');
 				btn.disabled = true;
@@ -543,7 +801,71 @@
 				transliterationRevealed = true;
 				transliterationEl.textContent = currentWord.transliteration;
 				updateCreditsUI();
+				saveGameData();
 			}
+		});
+
+		// ========== MONITORING MODAL ==========
+		function renderMonitoringTable() {
+			statsTbody.innerHTML = '';
+			wordPairs.forEach(p => {
+				const tr = document.createElement('tr');
+				const st = wordStats[p.english] || { successes: 0, fails: 0 };
+
+				const tdWord = document.createElement('td');
+				tdWord.textContent = p.english;
+
+				const tdSuccess = document.createElement('td');
+				tdSuccess.className = 'num num-success';
+				tdSuccess.textContent = st.successes || 0;
+
+				const tdFail = document.createElement('td');
+				tdFail.className = 'num num-fail';
+				tdFail.textContent = st.fails || 0;
+
+				tr.appendChild(tdWord);
+				tr.appendChild(tdSuccess);
+				tr.appendChild(tdFail);
+				statsTbody.appendChild(tr);
+			});
+		}
+
+		function openModal() {
+			renderMonitoringTable();
+			monitoringModal.classList.add('open');
+		}
+
+		function closeModal() {
+			monitoringModal.classList.remove('open');
+		}
+
+		gearBtn.addEventListener('click', openModal);
+		modalCloseBtn.addEventListener('click', closeModal);
+		monitoringModal.addEventListener('click', (e) => {
+			if (e.target === monitoringModal) {
+				closeModal();
+			}
+		});
+
+		window.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && monitoringModal.classList.contains('open')) {
+				closeModal();
+			}
+		});
+
+		clearStatsBtn.addEventListener('click', () => {
+			if (!confirm('Are you sure you want to reset all stats, score, and credits?')) return;
+			localStorage.removeItem(STORAGE_KEY);
+			score = 0;
+			roundsCompleted = 0;
+			creditsSpent = 0;
+			wordPairs.forEach(p => {
+				wordScores[p.english] = INITIAL_SCORE;
+			});
+			wordStats = {};
+			scoreEl.textContent = score;
+			updateCreditsUI();
+			renderMonitoringTable();
 		});
 
 		// ========== INIT ==========
@@ -564,6 +886,8 @@
 					wordScores[p.english] = INITIAL_SCORE;
 				});
 
+				loadSavedData();
+				scoreEl.textContent = score;
 				updateCreditsUI();
 				loadNewRound();
 			} catch (err) {
