@@ -808,7 +808,14 @@
 		// ========== MONITORING MODAL ==========
 		function renderMonitoringTable() {
 			statsTbody.innerHTML = '';
-			wordPairs.forEach(p => {
+			const sorted = [...wordPairs].sort((a, b) => {
+				const stA = wordStats[a.english] || { successes: 0, fails: 0 };
+				const stB = wordStats[b.english] || { successes: 0, fails: 0 };
+				const triesA = (stA.successes || 0) + (stA.fails || 0);
+				const triesB = (stB.successes || 0) + (stB.fails || 0);
+				return triesB - triesA;
+			});
+			sorted.forEach(p => {
 				const tr = document.createElement('tr');
 				const st = wordStats[p.english] || { successes: 0, fails: 0 };
 
