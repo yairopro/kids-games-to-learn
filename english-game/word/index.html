@@ -498,14 +498,18 @@
 			const hebrewUrl = `mp3/he/${encodeURIComponent(wordObj.english)}.he.mp3`;
 			const englishUrl = `mp3/en/${encodeURIComponent(wordObj.english)}.en.mp3`;
 
-			playAudioClip(hebrewUrl, wordObj.hebrew, 'he-IL', () => {
+			playAudioClip('mp3/right.effect.wav', '', 'en-US', () => {
 				audioSequenceTimer = setTimeout(() => {
-					playAudioClip(englishUrl, wordObj.english, 'en-US', () => {
+					playAudioClip(hebrewUrl, wordObj.hebrew, 'he-IL', () => {
 						audioSequenceTimer = setTimeout(() => {
-							if (onComplete) onComplete();
-						}, 300);
+							playAudioClip(englishUrl, wordObj.english, 'en-US', () => {
+								audioSequenceTimer = setTimeout(() => {
+									if (onComplete) onComplete();
+								}, 300);
+							});
+						}, 200);
 					});
-				}, 200);
+				}, 150);
 			});
 		}
 
