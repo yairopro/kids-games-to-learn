@@ -21,12 +21,19 @@ export class GameUI {
 		this.newSaveNameInput = document.getElementById('new-save-name-input');
 		this.createSaveBtn = document.getElementById('create-save-btn');
 		this.statsTbody = document.getElementById('stats-tbody');
+		this.resetScoreBtn = document.getElementById('reset-score-btn');
 		this.creditsWrap = document.querySelector('.credits-wrap');
 
 		this.initListeners();
 	}
 
 	initListeners() {
+		if (this.resetScoreBtn) {
+			this.resetScoreBtn.addEventListener('click', () => {
+				if (this.cb.onResetScore) this.cb.onResetScore();
+			});
+		}
+
 		this.mainAreaEl.addEventListener('click', () => {
 			if (this.cb.onMainAreaClick) this.cb.onMainAreaClick();
 		});

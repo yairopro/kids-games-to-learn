@@ -38,6 +38,7 @@ class WordGameApp {
 				onLoadSave: (id) => this.handleLoadSave(id),
 				onRenameSave: (id, name) => this.handleRenameSave(id, name),
 				onDeleteSave: (id) => this.handleDeleteSave(id),
+				onResetScore: () => this.handleResetScore(),
 				onOpenModal: () => this.refreshModalContent(),
 				onRefreshStats: () => this.renderStatsTable()
 			});
@@ -175,6 +176,13 @@ class WordGameApp {
 
 	handleDeleteSave(id) {
 		this.storage.deleteSave(id);
+		this.refreshModalContent();
+	}
+
+	handleResetScore() {
+		this.engine.score = 0;
+		this.persistState();
+		this.syncUI();
 		this.refreshModalContent();
 	}
 
