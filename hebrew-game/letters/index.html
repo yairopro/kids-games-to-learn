@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>משחק אותיות בעברית - אלף-בית</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Heebo:wght@400;700;900&family=Rubik:wght@400;600;800&display=swap"
+		rel="stylesheet">
+	<style>
+		body {
+			font-family: 'Rubik', 'Heebo', sans-serif;
+			background: linear-gradient(135deg, #f0f4fd 0%, #e2eafc 100%);
+			touch-action: manipulation;
+			overflow-x: hidden;
+		}
+
+		.letter-font {
+			font-family: 'Heebo', 'Rubik', sans-serif;
+		}
+
+		.card {
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+		}
+
+		.card:active {
+			transform: scale(0.95);
+		}
+
+		.correct-anim {
+			animation: bounce 0.5s ease;
+			background-color: #22c55e !important;
+			color: white !important;
+			border-color: #16a34a !important;
+		}
+
+		.wrong-anim {
+			animation: shake 0.5s ease;
+			background-color: #ef4444 !important;
+			color: white !important;
+			border-color: #dc2626 !important;
+		}
+
+		@keyframes bounce {
+			0%, 100% { transform: translateY(0); }
+			50% { transform: translateY(-16px); }
+		}
+
+		@keyframes shake {
+			0%, 100% { transform: translateX(0); }
+			20% { transform: translateX(-8px); }
+			40% { transform: translateX(8px); }
+			60% { transform: translateX(-6px); }
+			80% { transform: translateX(6px); }
+		}
+
+		.pulse-speaker {
+			animation: pulse 1.5s infinite;
+		}
+
+		@keyframes pulse {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.08); }
+		}
+
+		.no-scrollbar::-webkit-scrollbar {
+			display: none;
+		}
+
+		.no-scrollbar {
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+		}
+	</style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6">
+
+	<!-- Settings Modal -->
+	<div id="settings-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+		<div class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+			<div class="p-5 border-b flex justify-between items-center bg-indigo-50">
+				<h2 class="text-xl font-bold text-indigo-700">בחירת אותיות</h2>
+				<button onclick="toggleModal()" class="text-gray-500 hover:text-red-500 text-3xl font-sans leading-none">&times;</button>
+			</div>
+			<div class="p-4 overflow-y-auto grid grid-cols-4 sm:grid-cols-6 gap-2 no-scrollbar" id="letter-selector-grid"></div>
+			<div class="p-4 border-t flex gap-2">
+				<button onclick="selectAll(true)" class="flex-1 bg-gray-200 hover:bg-gray-300 py-2 rounded-xl text-sm font-semibold">בחר הכל</button>
+				<button onclick="selectWithoutSofiot()" class="flex-1 bg-gray-200 hover:bg-gray-300 py-2 rounded-xl text-sm font-semibold">ללא סופיות</button>
+				<button onclick="selectAll(false)" class="flex-1 bg-gray-200 hover:bg-gray-300 py-2 rounded-xl text-sm font-semibold">נקה הכל</button>
+				<button onclick="saveAndClose()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl font-bold">התחל!</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Stats Modal -->
+	<div id="stats-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+		<div class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+			<div class="p-5 border-b flex justify-between items-center bg-emerald-50">
+				<h2 class="text-xl font-bold text-emerald-700">סטטיסטיקת אותיות</h2>
+				<button onclick="toggleStatsModal()" class="text-gray-500 hover:text-red-500 text-3xl font-sans leading-none">&times;</button>
+			</div>
+			<div class="p-4 overflow-y-auto no-scrollbar" id="stats-content"></div>
+			<div class="p-4 border-t flex gap-2">
+				<button onclick="resetScore()" class="flex-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 py-2 rounded-xl text-sm font-semibold">אפס ניקוד</button>
+				<button onclick="if(confirm('לאפס הכל?')) resetAll()" class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-xl text-sm font-semibold">אפס הכל</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Main Game Container -->
+	<div class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-4 sm:p-6 border-4 border-indigo-300 relative z-10">
+		<!-- Top Bar -->
+		<div class="flex justify-between items-center mb-4">
+			<div class="flex gap-2">
+				<button onclick="toggleModal()" title="הגדרות" class="bg-indigo-100 text-indigo-600 p-2.5 rounded-2xl hover:bg-indigo-200 transition-colors">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+					</svg>
+				</button>
+				<button onclick="toggleStatsModal()" title="סטטיסטיקה" class="bg-emerald-100 text-emerald-600 p-2.5 rounded-2xl hover:bg-emerald-200 transition-colors">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+					</svg>
+				</button>
+			</div>
+			<div id="score-container" class="bg-yellow-400 text-white font-black px-5 py-2 rounded-full shadow-md text-xl min-w-[110px] text-center transition-all duration-300">
+				<span id="score" dir="ltr">0</span>
+			</div>
+		</div>
+
+		<!-- Question / Sound Player Area -->
+		<div class="text-center mb-5 flex flex-col items-center">
+			<button id="sound-btn" onclick="playCurrentAudio()" class="pulse-speaker bg-indigo-500 hover:bg-indigo-600 text-white p-5 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center mb-2" title="השמע שוב">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+				</svg>
+			</button>
+		</div>
+
+		<!-- Letter Grid (All active letters constantly displayed) -->
+		<div id="letters-grid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-2 sm:gap-3"></div>
+
+		<!-- Feedback text -->
+		<div id="feedback" class="mt-4 text-center text-xl font-bold h-7 opacity-0 transition-opacity duration-300">
+			כל הכבוד! 🌟
+		</div>
+	</div>
+
+	<audio id="audio-player" preload="auto"></audio>
+
+	<script type="module">
+		import { letters } from './letters.js';
+
+		const allLetters = letters.map(l => ({
+			id: l.char,
+			char: l.char,
+			name: l.spokenName,
+			file: l.file,
+			isSofit: l.spokenName.includes('סוֹפִית'),
+			active: true,
+			successes: 0,
+			failures: 0
+		}));
+
+		const STORAGE_KEY = 'hebrew-letters-game';
+
+		function saveState() {
+			const data = {
+				score,
+				hasCelebrated,
+				letters: allLetters.map(l => ({ id: l.id, active: l.active, successes: l.successes, failures: l.failures }))
+			};
+			try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+		}
+
+		function loadState() {
+			try {
+				const raw = localStorage.getItem(STORAGE_KEY);
+				if (!raw) return;
+				const data = JSON.parse(raw);
+				if (typeof data.score === 'number') score = data.score;
+				if (typeof data.hasCelebrated === 'boolean') hasCelebrated = data.hasCelebrated;
+				if (Array.isArray(data.letters)) {
+					data.letters.forEach(saved => {
+						const l = allLetters.find(x => x.id === saved.id || x.char === saved.id);
+						if (!l) return;
+						if (typeof saved.active === 'boolean') l.active = saved.active;
+						if (typeof saved.successes === 'number') l.successes = saved.successes;
+						if (typeof saved.failures === 'number') l.failures = saved.failures;
+					});
+				}
+			} catch (e) {}
+		}
+
+		function resetScore() {
+			score = 0;
+			hasCelebrated = false;
+			scoreEl.textContent = score;
+			scoreContainer.classList.remove('scale-110', 'bg-pink-500');
+			saveState();
+			updateStatsUI();
+		}
+
+		function resetAll() {
+			score = 0;
+			hasCelebrated = false;
+			allLetters.forEach(l => { l.active = true; l.successes = 0; l.failures = 0; });
+			scoreEl.textContent = score;
+			scoreContainer.classList.remove('scale-110', 'bg-pink-500');
+			saveState();
+			updateStatsUI();
+			initRound();
+		}
+
+		let score = 0;
+		let currentLetter = null;
+		let isProcessing = false;
+		let hasCelebrated = false;
+
+		const audioPlayer = document.getElementById('audio-player');
+		const scoreEl = document.getElementById('score');
+		const scoreContainer = document.getElementById('score-container');
+		const lettersGrid = document.getElementById('letters-grid');
+		const feedbackEl = document.getElementById('feedback');
+		const modal = document.getElementById('settings-modal');
+		const statsModal = document.getElementById('stats-modal');
+		const selectorGrid = document.getElementById('letter-selector-grid');
+		const statsContent = document.getElementById('stats-content');
+
+		function setupSelector() {
+			selectorGrid.innerHTML = '';
+			allLetters.forEach(l => {
+				const btn = document.createElement('button');
+				btn.className = `p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${l.active ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-400'}`;
+				btn.innerHTML = `<span class="text-2xl font-bold letter-font">${l.char}</span><span class="text-xs text-gray-500">${l.name}</span>`;
+				btn.onclick = () => {
+					l.active = !l.active;
+					btn.className = `p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${l.active ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-400'}`;
+				};
+				selectorGrid.appendChild(btn);
+			});
+		}
+
+		function selectAll(val) {
+			allLetters.forEach(l => l.active = val);
+			setupSelector();
+		}
+
+		function selectWithoutSofiot() {
+			allLetters.forEach(l => l.active = !l.isSofit);
+			setupSelector();
+		}
+
+		function toggleModal() {
+			modal.classList.toggle('hidden');
+			modal.classList.toggle('flex');
+			if (!modal.classList.contains('hidden')) {
+				setupSelector();
+			}
+		}
+
+		function saveAndClose() {
+			const activeCount = allLetters.filter(l => l.active).length;
+			if (activeCount < 2) {
+				alert('נא לבחור לפחות 2 אותיות!');
+				return;
+			}
+			toggleModal();
+			saveState();
+			initRound();
+		}
+
+		function toggleStatsModal() {
+			statsModal.classList.toggle('hidden');
+			statsModal.classList.toggle('flex');
+			if (!statsModal.classList.contains('hidden')) {
+				updateStatsUI();
+			}
+		}
+
+		function updateStatsUI() {
+			statsContent.innerHTML = '';
+			const table = document.createElement('table');
+			table.className = 'w-full text-right border-collapse font-sans';
+			table.innerHTML = `
+				<thead>
+					<tr class="border-b bg-gray-100 text-gray-600 text-sm">
+						<th class="p-2">אות</th>
+						<th class="p-2">שם</th>
+						<th class="p-2 text-center text-emerald-600">הצלחות</th>
+						<th class="p-2 text-center text-rose-600">שגיאות</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			`;
+			const tbody = table.querySelector('tbody');
+			allLetters.forEach(l => {
+				const row = document.createElement('tr');
+				row.className = 'border-b text-gray-700 hover:bg-gray-50';
+				row.innerHTML = `
+					<td class="p-2 text-xl font-bold letter-font">${l.char}</td>
+					<td class="p-2 text-sm">${l.name}</td>
+					<td class="p-2 text-center text-emerald-600 font-bold">${l.successes}</td>
+					<td class="p-2 text-center text-rose-600 font-bold">${l.failures}</td>
+				`;
+				tbody.appendChild(row);
+			});
+			statsContent.appendChild(table);
+		}
+
+		function playAudioFor(file, fallbackText) {
+			audioPlayer.src = `mp3/${file}`;
+			audioPlayer.play().catch(err => {
+				console.warn('Audio play failed or file missing, falling back to Web Speech API:', err);
+				if ('speechSynthesis' in window) {
+					window.speechSynthesis.cancel();
+					const utter = new SpeechSynthesisUtterance(fallbackText || '');
+					utter.lang = 'he-IL';
+					window.speechSynthesis.speak(utter);
+				}
+			});
+		}
+
+		function playCurrentAudio() {
+			if (!currentLetter) return;
+			playAudioFor(currentLetter.file, currentLetter.name);
+		}
+
+		function getRandomLetter() {
+			const activePool = allLetters.filter(l => l.active);
+			// Weight letters with more failures or less practice
+			const weightedPool = [];
+			activePool.forEach(l => {
+				const weight = 1 + (l.failures * 2);
+				for (let i = 0; i < weight; i++) {
+					weightedPool.push(l);
+				}
+			});
+			return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+		}
+
+		function triggerConfetti() {
+			const duration = 4 * 1000;
+			const animationEnd = Date.now() + duration;
+			const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+			const interval = setInterval(function () {
+				const timeLeft = animationEnd - Date.now();
+				if (timeLeft <= 0) return clearInterval(interval);
+				const particleCount = 50 * (timeLeft / duration);
+				confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() * 0.4, y: Math.random() - 0.2 } }));
+				confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() * 0.4 + 0.6, y: Math.random() - 0.2 } }));
+			}, 250);
+
+			scoreContainer.classList.add('scale-110', 'bg-pink-500');
+		}
+
+		function renderGrid() {
+			lettersGrid.innerHTML = '';
+			const activeLetters = allLetters.filter(l => l.active);
+			activeLetters.forEach(letter => {
+				const btn = document.createElement('button');
+				btn.id = `letter-btn-${letter.id}`;
+				btn.className = 'card bg-white border-2 border-indigo-200 hover:border-indigo-400 hover:bg-indigo-50/50 rounded-2xl p-2 sm:p-3 shadow-md flex flex-col items-center justify-center transition-all duration-150';
+				btn.innerHTML = `
+					<span class="text-3xl sm:text-4xl font-black text-indigo-900 letter-font">${letter.char}</span>
+				`;
+				btn.onclick = () => handleChoice(letter, btn);
+				lettersGrid.appendChild(btn);
+			});
+		}
+
+		function initRound() {
+			isProcessing = false;
+			renderGrid();
+			currentLetter = getRandomLetter();
+			playCurrentAudio();
+		}
+
+		function handleChoice(letter, btn) {
+			if (isProcessing) return;
+			if (btn.disabled) return;
+
+			if (letter.id === currentLetter.id) {
+				isProcessing = true;
+				letter.successes++;
+				score += 1;
+				scoreEl.textContent = score;
+				saveState();
+
+				btn.classList.add('correct-anim');
+				feedbackEl.textContent = "מצוין! כל הכבוד! 🌟";
+				feedbackEl.className = "mt-4 text-center text-xl font-bold h-7 text-emerald-600 opacity-100 transition-opacity duration-300";
+
+				if (score >= 100 && !hasCelebrated) {
+					hasCelebrated = true;
+					triggerConfetti();
+				}
+
+				setTimeout(() => {
+					feedbackEl.className = "mt-4 text-center text-xl font-bold h-7 opacity-0 transition-opacity duration-300";
+					initRound();
+				}, 1000);
+			} else {
+				letter.failures++;
+				score -= 1;
+				scoreEl.textContent = score;
+				saveState();
+				if ('vibrate' in navigator) {
+					navigator.vibrate(100);
+				}
+
+				btn.disabled = true;
+				btn.classList.add('opacity-40', 'cursor-not-allowed');
+				btn.classList.add('wrong-anim');
+				feedbackEl.textContent = "לא בדיוק, נסו שוב! 💪";
+				feedbackEl.className = "mt-4 text-center text-xl font-bold h-7 text-rose-600 opacity-100 transition-opacity duration-300";
+
+				// Play sound again as an auditory reminder
+				playCurrentAudio();
+
+				setTimeout(() => {
+					btn.classList.remove('wrong-anim');
+					feedbackEl.className = "mt-4 text-center text-xl font-bold h-7 opacity-0 transition-opacity duration-300";
+				}, 1200);
+			}
+		}
+
+		// Keyboard event listener for Hebrew keyboard input
+		window.addEventListener('keydown', (e) => {
+			if (modal.classList.contains('flex') || statsModal.classList.contains('flex')) return;
+			const pressedChar = e.key;
+			const match = allLetters.find(l => l.char === pressedChar && l.active);
+			if (match) {
+				const btn = document.getElementById(`letter-btn-${match.id}`);
+				if (btn && !btn.disabled) handleChoice(match, btn);
+			}
+		});
+
+		Object.assign(window, {
+			toggleModal,
+			selectAll,
+			selectWithoutSofiot,
+			saveAndClose,
+			toggleStatsModal,
+			resetScore,
+			resetAll,
+			playCurrentAudio
+		});
+
+		window.onload = () => {
+			loadState();
+			scoreEl.textContent = score;
+			initRound();
+		};
+	</script>
+</body>
+
+</html>

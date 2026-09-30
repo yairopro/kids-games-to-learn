@@ -1,0 +1,37 @@
+/**
+ * Source of truth.
+ * Use char as id and to display.
+ */
+export const letters = [
+	{ char: 'א', spokenName: 'א', file: 'alef.mp3' },
+	{ char: 'בּ', spokenName: 'בֶּת', file: 'bet.mp3' },
+	{ char: 'ב', spokenName: 'בֶת', file: 'vet.mp3' },
+	{ char: 'ג', spokenName: 'ג', file: 'gimel.mp3' },
+	{ char: 'ד', spokenName: 'דָלֶת', file: 'dalet.mp3' },
+	{ char: 'ה', spokenName: 'ה', file: 'he.mp3' },
+	{ char: 'ו', spokenName: 'וָו', file: 'vav.mp3' },
+	{ char: 'ז', spokenName: 'ז', file: 'zayin.mp3' },
+	{ char: 'ח', spokenName: 'ח', file: 'chet.mp3' },
+	{ char: 'ט', spokenName: 'ט', file: 'tet.mp3' },
+	{ char: 'י', spokenName: 'יֻד', file: 'yud.mp3' },
+	{ char: 'כּ', spokenName: 'כָּף', file: 'kaf.mp3' },
+	{ char: 'כ', spokenName: 'חַף', file: 'haf.mp3' },
+	{ char: 'ך', spokenName: 'חַף סוֹפִית', file: 'haf_sofit.mp3' },
+	{ char: 'ל', spokenName: 'לָּמֶד', file: 'lamed.mp3' },
+	{ char: 'מ', spokenName: 'מֵם', file: 'mem.mp3' },
+	{ char: 'ם', spokenName: 'מֵם סוֹפִית', file: 'mem_sofit.mp3' },
+	{ char: 'נ', spokenName: 'נוּן', file: 'nun.mp3' },
+	{ char: 'ן', spokenName: 'נוּן סוֹפִית', file: 'nun_sofit.mp3' },
+	{ char: 'ס', spokenName: 'סָמֶךְ', file: 'samech.mp3' },
+	{ char: 'ע', spokenName: 'עַיִן', file: 'ayin.mp3' },
+	{ char: 'פּ', spokenName: 'פֵּא', file: 'pe.mp3' },
+	{ char: 'פ', spokenName: 'פֵא', file: 'fe.mp3' },
+	{ char: 'ף', spokenName: 'פֵא סוֹפִית', file: 'fe_sofit.mp3' },
+	{ char: 'צ', spokenName: 'צָדִיק', file: 'tsadik.mp3' },
+	{ char: 'ץ', spokenName: 'צָדִיק סוֹפִית', file: 'tsadik_sofit.mp3' },
+	{ char: 'ק', spokenName: 'קוּף', file: 'kof.mp3' },
+	{ char: 'ר', spokenName: 'רֵשׁ', file: 'resh.mp3' },
+	{ char: 'שׁ', spokenName: 'שִׁן', file: 'shin.mp3' },
+	{ char: 'שׂ', spokenName: 'סִן', file: 'sin.mp3' },
+	{ char: 'ת', spokenName: 'טָב', file: 'tav.mp3' },
+];

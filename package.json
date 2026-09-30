@@ -13,5 +13,8 @@
 	},
 	"devDependencies": {
 		"firebase-tools": "^15.30.0"
+	},
+	"dependencies": {
+		"node-edge-tts": "^1.2.10"
 	}
 }
