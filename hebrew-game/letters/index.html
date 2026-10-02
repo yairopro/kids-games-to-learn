@@ -77,7 +77,7 @@
 	</style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6">
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 pb-28 sm:pb-32">
 
 	<!-- Settings Modal -->
 	<div id="settings-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
@@ -135,15 +135,6 @@
 			</div>
 		</div>
 
-		<!-- Question / Sound Player Area -->
-		<div class="text-center mb-5 flex flex-col items-center">
-			<button id="sound-btn" onclick="playCurrentAudio()" class="pulse-speaker bg-indigo-500 hover:bg-indigo-600 text-white p-5 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center mb-2" title="השמע שוב">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-				</svg>
-			</button>
-		</div>
-
 		<!-- Letter Grid (All active letters constantly displayed) -->
 		<div id="letters-grid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-2 sm:gap-3"></div>
 
@@ -151,6 +142,15 @@
 		<div id="feedback" class="mt-4 text-center text-xl font-bold h-7 opacity-0 transition-opacity duration-300">
 			כל הכבוד! 🌟
 		</div>
+	</div>
+
+	<!-- Fixed Bottom-Center Player Button -->
+	<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">
+		<button id="sound-btn" onclick="playCurrentAudio()" class="bg-indigo-600 hover:bg-indigo-700 text-white p-5 rounded-full shadow-2xl transition-transform hover:scale-105 active:scale-95 flex items-center justify-center border-4 border-white" title="השמע שוב">
+			<svg id="sound-btn-icon" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
+				<path d="M8 5v14l11-7z"/>
+			</svg>
+		</button>
 	</div>
 
 	<audio id="audio-player" preload="auto"></audio>
@@ -315,22 +315,82 @@
 			statsContent.appendChild(table);
 		}
 
-		function playAudioFor(file, fallbackText) {
-			audioPlayer.src = `mp3/${file}`;
-			audioPlayer.play().catch(err => {
+		const soundBtn = document.getElementById('sound-btn');
+		const soundBtnIcon = document.getElementById('sound-btn-icon');
+
+		const PLAY_ICON_SVG = '<path d="M8 5v14l11-7z"/>';
+		const SOUND_ICON_SVG = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />';
+
+		function setPlayingUI(isPlaying) {
+			if (!soundBtnIcon || !soundBtn) return;
+			if (isPlaying) {
+				soundBtnIcon.setAttribute('fill', 'none');
+				soundBtnIcon.setAttribute('stroke', 'currentColor');
+				soundBtnIcon.innerHTML = SOUND_ICON_SVG;
+				soundBtn.classList.add('pulse-speaker');
+			} else {
+				soundBtnIcon.setAttribute('fill', 'currentColor');
+				soundBtnIcon.removeAttribute('stroke');
+				soundBtnIcon.innerHTML = PLAY_ICON_SVG;
+				soundBtn.classList.remove('pulse-speaker');
+			}
+		}
+
+		let effectAudio = new Audio();
+
+		function playAudioFor(file, fallbackText, onEnded) {
+			setPlayingUI(true);
+			audioPlayer.src = file.startsWith('/') ? file : `mp3/${file}`;
+			const onEnd = () => {
+				audioPlayer.removeEventListener('ended', onEnd);
+				audioPlayer.removeEventListener('error', onError);
+				setPlayingUI(false);
+				if (onEnded) onEnded();
+			};
+			const onError = (err) => {
+				audioPlayer.removeEventListener('ended', onEnd);
+				audioPlayer.removeEventListener('error', onError);
 				console.warn('Audio play failed or file missing, falling back to Web Speech API:', err);
 				if ('speechSynthesis' in window) {
 					window.speechSynthesis.cancel();
 					const utter = new SpeechSynthesisUtterance(fallbackText || '');
 					utter.lang = 'he-IL';
+					utter.onend = () => {
+						setPlayingUI(false);
+						if (onEnded) onEnded();
+					};
+					utter.onerror = () => {
+						setPlayingUI(false);
+						if (onEnded) onEnded();
+					};
 					window.speechSynthesis.speak(utter);
+				} else {
+					setPlayingUI(false);
+					if (onEnded) onEnded();
 				}
+			};
+			audioPlayer.addEventListener('ended', onEnd);
+			audioPlayer.addEventListener('error', onError);
+			audioPlayer.currentTime = 0;
+			audioPlayer.play().catch(onError);
+		}
+
+		function playEffect(url, onEnded) {
+			effectAudio.pause();
+			effectAudio.currentTime = 0;
+			effectAudio = new Audio(url);
+			if (onEnded) {
+				effectAudio.addEventListener('ended', onEnded, { once: true });
+				effectAudio.addEventListener('error', onEnded, { once: true });
+			}
+			effectAudio.play().catch(() => {
+				if (onEnded) onEnded();
 			});
 		}
 
-		function playCurrentAudio() {
+		function playCurrentAudio(onEnded) {
 			if (!currentLetter) return;
-			playAudioFor(currentLetter.file, currentLetter.name);
+			playAudioFor(currentLetter.file, currentLetter.name, onEnded);
 		}
 
 		function getRandomLetter() {
@@ -404,6 +464,8 @@
 					triggerConfetti();
 				}
 
+				playEffect('/assets/audio/right.effect.mp3');
+
 				setTimeout(() => {
 					feedbackEl.className = "mt-4 text-center text-xl font-bold h-7 opacity-0 transition-opacity duration-300";
 					initRound();
@@ -414,7 +476,7 @@
 				scoreEl.textContent = score;
 				saveState();
 				if ('vibrate' in navigator) {
-					navigator.vibrate(100);
+					navigator.vibrate(200);
 				}
 
 				btn.disabled = true;
@@ -423,8 +485,10 @@
 				feedbackEl.textContent = "לא בדיוק, נסו שוב! 💪";
 				feedbackEl.className = "mt-4 text-center text-xl font-bold h-7 text-rose-600 opacity-100 transition-opacity duration-300";
 
-				// Play sound again as an auditory reminder
-				playCurrentAudio();
+				// Play wrong effect first, then play letter sound as reminder
+				playEffect('/assets/audio/wrong.effect.mp3', () => {
+					playCurrentAudio();
+				});
 
 				setTimeout(() => {
 					btn.classList.remove('wrong-anim');

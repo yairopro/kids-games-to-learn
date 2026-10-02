@@ -72,7 +72,7 @@ export class SoundPlayer {
 		const hebrewUrl = `mp3/he/${encodeURIComponent(wordObj.english)}.he.mp3`;
 		const englishUrl = `mp3/en/${encodeURIComponent(wordObj.english)}.en.mp3`;
 
-		this.playAudioClip('mp3/right.effect.mp3', '', 'en-US', () => {
+		this.playAudioClip('/assets/audio/right.effect.mp3', '', 'en-US', () => {
 			this.audioSequenceTimer = setTimeout(() => {
 				this.playAudioClip(hebrewUrl, wordObj.hebrew, 'he-IL', () => {
 					this.audioSequenceTimer = setTimeout(() => {
@@ -88,7 +88,7 @@ export class SoundPlayer {
 	}
 
 	playWrongSequence(englishWord) {
-		this.playAudioClip('mp3/wrong.effect.mp3', '', 'en-US', () => {
+		this.playAudioClip('/assets/audio/wrong.effect.mp3', '', 'en-US', () => {
 			this.audioSequenceTimer = setTimeout(() => this.playWord(englishWord));
 		});
 	}
