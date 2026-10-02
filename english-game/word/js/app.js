@@ -14,6 +14,7 @@ class WordGameApp {
 		this.awaitingAfterCorrect = false;
 		this.suggestionsRevealed = false;
 		this.transliterationRevealed = false;
+		this.soundUnlocked = false;
 	}
 
 	async init() {
@@ -68,6 +69,13 @@ class WordGameApp {
 		this.storage.saveCurrent(this.engine.getState());
 	}
 
+	isSoundAvailable() {
+		if (!this.engine.currentWord) return false;
+		const wordScore = this.engine.getWordScore(this.engine.currentWord.english);
+		if (wordScore < 10) return true;
+		return this.soundUnlocked;
+	}
+
 	loadRound() {
 		this.audio.stop();
 
@@ -84,6 +92,7 @@ class WordGameApp {
 		this.awaitingAfterCorrect = false;
 		this.suggestionsRevealed = false;
 		this.transliterationRevealed = false;
+		this.soundUnlocked = false;
 
 		this.ui.showRound(round.word, round.choices, (btn, chosen) => {
 			this.handleChoice(btn, chosen);
@@ -107,6 +116,7 @@ class WordGameApp {
 				this.loadRound();
 			});
 		} else {
+			const soundCanPlay = this.isSoundAvailable();
 			this.engine.recordFailure(current.english);
 			this.persistState();
 			this.ui.setScore(this.engine.score);
@@ -115,7 +125,9 @@ class WordGameApp {
 			if (navigator.vibrate) {
 				navigator.vibrate(200);
 			}
-			this.audio.playWrongSequence(current.english);
+			if (soundCanPlay) {
+				this.audio.playWrongSequence(current.english);
+			}
 		}
 	}
 
@@ -126,7 +138,7 @@ class WordGameApp {
 			return;
 		}
 
-		if (this.engine.currentWord) {
+		if (this.engine.currentWord && this.isSoundAvailable()) {
 			this.audio.playWord(this.engine.currentWord.english);
 		}
 
@@ -137,13 +149,28 @@ class WordGameApp {
 	}
 
 	handleCreditsClick() {
-		if (this.awaitingNextRound) return;
+		if (this.awaitingNextRound || !this.engine.currentWord) return;
 
-		if (!this.transliterationRevealed && this.engine.useCredit()) {
-			this.transliterationRevealed = true;
-			this.ui.showTransliteration(this.engine.currentWord.transliteration);
-			this.syncUI();
-			this.persistState();
+		const wordScore = this.engine.getWordScore(this.engine.currentWord.english);
+
+		if (wordScore >= 10) {
+			if (!this.soundUnlocked) {
+				if (this.engine.useCredit()) {
+					this.soundUnlocked = true;
+					this.transliterationRevealed = true;
+					this.ui.showTransliteration(this.engine.currentWord.transliteration);
+					this.audio.playWord(this.engine.currentWord.english);
+					this.syncUI();
+					this.persistState();
+				}
+			}
+		} else {
+			if (!this.transliterationRevealed && this.engine.useCredit()) {
+				this.transliterationRevealed = true;
+				this.ui.showTransliteration(this.engine.currentWord.transliteration);
+				this.syncUI();
+				this.persistState();
+			}
 		}
 	}
 

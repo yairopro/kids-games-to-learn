@@ -1,4 +1,4 @@
-export const INITIAL_WEIGHT = 10;
+export const INITIAL_WEIGHT = 15;
 
 export function shuffleArray(arr) {
 	const copy = [...arr];
@@ -53,6 +53,12 @@ export class GameEngine {
 			return true;
 		}
 		return false;
+	}
+
+	getWordScore(english) {
+		const st = this.wordStats[english];
+		if (!st) return 0;
+		return (st.successes || 0) - (st.fails || 0);
 	}
 
 	getWordWeight(english) {
