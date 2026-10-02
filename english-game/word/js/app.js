@@ -207,7 +207,7 @@ class WordGameApp {
 	}
 
 	handleResetScore() {
-		this.engine.score = 0;
+		this.engine.resetScoreAndCredits();
 		this.persistState();
 		this.syncUI();
 		this.refreshModalContent();

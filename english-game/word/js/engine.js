@@ -55,6 +55,11 @@ export class GameEngine {
 		return false;
 	}
 
+	resetScoreAndCredits() {
+		this.score = 0;
+		this.creditsSpent = this.getCreditsEarned();
+	}
+
 	getWordScore(english) {
 		const st = this.wordStats[english];
 		if (!st) return 0;

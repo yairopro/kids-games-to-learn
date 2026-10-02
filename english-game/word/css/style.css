@@ -413,6 +413,11 @@ body {
 	margin-top: 16px;
 	display: flex;
 	justify-content: flex-end;
+	position: sticky;
+	bottom: -16px;
+	background: #fff;
+	padding: 12px 0 0;
+	z-index: 2;
 }
 
 .btn-reset-score {
