@@ -195,7 +195,8 @@ class QuizApp {
 			this.dom.nextBtn.classList.add('visible');
 		} else {
 			this.audio.playWrong();
-			this.score -= 1;
+			const penalty = this.score < 0 ? 1 : Math.max(1, Math.trunc(this.score / 10) + 1);
+			this.score -= penalty;
 			this.stats[id].fails += 1;
 			this.updateScoreDisplay();
 			this.saveStorage();
